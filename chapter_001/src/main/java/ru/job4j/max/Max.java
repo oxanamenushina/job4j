@@ -17,3 +17,4 @@ public class Max {
         return first > second ? first : second;
     }
 }
+

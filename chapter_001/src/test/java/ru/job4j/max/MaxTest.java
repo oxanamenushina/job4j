@@ -16,8 +16,17 @@ public class MaxTest {
     @Test
     public void whenFirstLessSecond() {
         Max maxim = new Max();
-        int result = maxim.max(3, 2);
+        int result = maxim.max(2, 3);
         assertThat(result, is(3));
     }
 
+    /**
+     * Test Выбор максимального числа.
+     */
+    @Test
+    public void whenSecondLessFirst() {
+        Max maxim = new Max();
+        int result = maxim.max(2, 1);
+        assertThat(result, is(2));
+    }
 }
