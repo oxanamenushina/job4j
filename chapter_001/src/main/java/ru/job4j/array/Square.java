@@ -6,7 +6,6 @@ package ru.job4j.array;
  * @author Oxana Menushina (oxsm@mail.ru).
  */
 public class Square {
-
     /**
      * Метод заполнения массива квадратами чисел.
      *
