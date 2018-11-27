@@ -12,11 +12,9 @@ public class Check {
      * @return true - все элементы массива одинаковые, false - элементы массива разные.
      */
     public boolean mono(boolean[] data) {
-        boolean result = false;
+        boolean result = true;
         for (boolean bool : data) {
-            if (bool == data[0]) {
-                result = true;
-            } else {
+            if (bool != data[0]) {
                 result = false;
                 break;
             }
