@@ -1,7 +1,7 @@
 package ru.job4j.tracker;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+
 /**
  * Item.
  *
@@ -27,9 +27,10 @@ public class Tracker {
      * @param item Новая заявка.
      */
     public void replace(String id, Item item) {
-        for (int i = 0; i < this.items.length; i++) {
+        for (int i = 0; i < this.position; i++) {
             if (id.equals(this.items[i].getId())) {
                 this.items[i] = item;
+                item.setId(id);
                 break;
             }
         }
@@ -40,9 +41,10 @@ public class Tracker {
      * @param id Идентификатор удаляемой заявки.
      */
     public void delete(String id) {
-        for (int i = 0; i < this.items.length; i++) {
+        for (int i = 0; i < this.position; i++) {
             if (id.equals(this.items[i].getId())) {
                 System.arraycopy(this.items, i + 1, this.items, i, this.items.length - i - 1);
+                this.position--;
                 break;
             }
         }
@@ -53,13 +55,7 @@ public class Tracker {
      * @return массив без null.
      */
     public Item[] findAll() {
-        int ind = 0;
-        while (ind < items.length && this.items[ind] != null) {
-            ind++;
-        }
-        Item[] result = new Item[ind];
-        System.arraycopy(this.items, 0, result, 0, result.length);
-        return result;
+        return Arrays.copyOf(this.items, this.position);
     }
 
     /**
@@ -68,13 +64,14 @@ public class Tracker {
      * @return Массив заявок с совпадающим именем.
      */
     public Item[] findByName(String key) {
-        List<Item> copies = new ArrayList<>();
-        for (Item item : this.items) {
-            if (item != null && key.equals(item.getName())) {
-                copies.add(item);
+        Item[] copies = new Item[100];
+        int j = 0;
+        for (int i = 0; i < this.position; i++) {
+            if (key.equals(this.items[i].getName())) {
+                copies[j++] = this.items[i];
             }
         }
-        return copies.toArray(new Item[copies.size()]);
+        return Arrays.copyOf(copies, j);
     }
 
     /**
@@ -84,9 +81,9 @@ public class Tracker {
      */
     public Item findById(String id) {
         Item found = null;
-        for (Item item : this.items) {
-            if (id.equals(item.getId())) {
-                found = item;
+        for (int i = 0; i < this.position; i++) {
+            if (id.equals(this.items[i].getId())) {
+                found = this.items[i];
                 break;
             }
         }

@@ -77,4 +77,5 @@ public class TrackerTest {
         tracker.add(second);
         assertThat(tracker.findById(first.getId()), is(first));
     }
+
 }
