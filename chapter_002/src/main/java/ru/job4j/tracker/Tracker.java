@@ -26,28 +26,34 @@ public class Tracker {
      * @param id Идентификатор заменяемой заявки.
      * @param item Новая заявка.
      */
-    public void replace(String id, Item item) {
+    public boolean replace(String id, Item item) {
+        boolean result = false;
         for (int i = 0; i < this.position; i++) {
             if (id.equals(this.items[i].getId())) {
                 this.items[i] = item;
                 item.setId(id);
+                result = true;
                 break;
             }
         }
+        return result;
     }
 
     /**
      * Метод находит заявку по идентификатору в массиве и удаляет ее.
      * @param id Идентификатор удаляемой заявки.
      */
-    public void delete(String id) {
+    public boolean delete(String id) {
+        boolean result = false;
         for (int i = 0; i < this.position; i++) {
             if (id.equals(this.items[i].getId())) {
                 System.arraycopy(this.items, i + 1, this.items, i, this.items.length - i - 1);
                 this.position--;
+                result = true;
                 break;
             }
         }
+        return result;
     }
 
     /**
