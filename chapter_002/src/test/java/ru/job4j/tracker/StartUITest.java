@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
+
 /**
  * Test StartUI.
  */
@@ -56,4 +57,5 @@ public class StartUITest {
         new StartUI(input, tracker).init();
         assertThat(tracker.findAll(), is(expect));
     }
+
 }
