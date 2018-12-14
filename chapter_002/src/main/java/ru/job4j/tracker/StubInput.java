@@ -15,7 +15,7 @@ public class StubInput implements Input {
 
     /**
      * Метод заменяет ответы пользователя.
-     * @param question.
+     * @param question
      * Ответ пользователя.
      */
     @Override

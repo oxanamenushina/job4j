@@ -56,5 +56,4 @@ public class StartUITest {
         new StartUI(input, tracker).init();
         assertThat(tracker.findAll(), is(expect));
     }
-
 }
