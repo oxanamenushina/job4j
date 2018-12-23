@@ -9,6 +9,7 @@ public class StartUI {
     private final Input input;
     private final Tracker tracker;
     private int[] range;
+    private boolean exit = false;
 
     /**
      * Конструтор инициализирующий поля.
@@ -25,7 +26,7 @@ public class StartUI {
      */
     public void init() {
         MenuTracker menu = new MenuTracker(this.input, this.tracker);
-        menu.fillActions();
+        menu.fillActions(this);
         range = new int[menu.getActionsLentgh()];
         for (int i = 0; i < menu.getActionsLentgh(); i++) {
             range[i] = i;
@@ -33,9 +34,15 @@ public class StartUI {
         do {
             menu.show();
             menu.select(input.ask("select:", range));
-        } while (!"y".equals(this.input.ask("Exit?(y): ")));
+        } while (!this.exit);
     }
 
+    /**
+     * Устанавливает значение true для поля exit
+     */
+    public void closeProgram() {
+        this.exit = true;
+    }
 
     /**
      * Запуск программы.
