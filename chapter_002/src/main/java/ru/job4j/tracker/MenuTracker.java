@@ -23,8 +23,8 @@ public class MenuTracker {
 
     /**
      * Конструктор.
-     * @param input   объект типа Input
-     * @param tracker объект типа Tracker
+     * @param input объект типа Input.
+     * @param tracker объект типа Tracker.
      */
     public MenuTracker(Input input, Tracker tracker) {
         this.input = input;
@@ -33,7 +33,7 @@ public class MenuTracker {
 
     /**
      * Метод для получения массива меню.
-     * @return длину массива
+     * @return длину массива.
      */
     public int getActionsLentgh() {
         return this.actions.size();
@@ -43,13 +43,13 @@ public class MenuTracker {
      * Метод заполняет массив.
      */
     public void fillActions(StartUI ui) {
-        this.actions.add(new AddItem());
-        this.actions.add(new ShowItems());
-        this.actions.add(new UpdateItem());
-        this.actions.add(new DeleteItem());
-        this.actions.add(new FindItemById());
-        this.actions.add(new FindItemsByName());
-        this.actions.add(new ExitProgram(ui));
+        this.actions.add(new AddItem(0, "Добавление новой заявки"));
+        this.actions.add(new ShowItems(1, "Вывод всех заявок"));
+        this.actions.add(new UpdateItem(2, "Редактирование заявки"));
+        this.actions.add(new DeleteItem(3, "Удаление заявки"));
+        this.actions.add(new FindItemById(4, "Поиск заявки по ID"));
+        this.actions.add(new FindItemsByName(5, "Поиск заявки по имени"));
+        this.actions.add(new ExitProgram(ui, 6, "Выход из программы"));
     }
 
     /**
@@ -74,10 +74,10 @@ public class MenuTracker {
     /**
      * Добавление новой заявки.
      */
-    private class AddItem implements UserAction {
-        @Override
-        public int key() {
-            return 0;
+    private class AddItem extends BaseAction {
+
+        public AddItem(int key, String name) {
+            super(key, name);
         }
 
         @Override
@@ -91,20 +91,15 @@ public class MenuTracker {
             System.out.println("------------ Имя новой заявки: " + item.getName() + "-----------");
             System.out.println("------------ Описание новой заявки: " + item.getDesc() + "-----------");
         }
-
-        @Override
-        public String info() {
-            return "Add new item.";
-        }
     }
 
     /**
      * Вывод всех даявок.
      */
-    private class ShowItems implements UserAction {
-        @Override
-        public int key() {
-            return 1;
+    private class ShowItems extends BaseAction {
+
+        public ShowItems(int key, String name) {
+            super(key, name);
         }
 
         @Override
@@ -117,20 +112,15 @@ public class MenuTracker {
                 System.out.println("Описание заявки: " + item.getDesc());
             }
         }
-
-        @Override
-        public String info() {
-            return "Show all Items.";
-        }
     }
 
     /**
      * Редактирование заявки.
      */
-    private class UpdateItem implements UserAction {
-        @Override
-        public int key() {
-            return 2;
+    private class UpdateItem extends BaseAction {
+
+        public UpdateItem(int key, String name) {
+            super(key, name);
         }
 
         @Override
@@ -148,20 +138,15 @@ public class MenuTracker {
                 System.out.println("------------ Заявка с ID : " + id + " не заменена на новую -----------");
             }
         }
-
-        @Override
-        public String info() {
-            return "Edit item.";
-        }
     }
 
     /**
      * Удаление заявки.
      */
-    private class DeleteItem implements UserAction {
-        @Override
-        public int key() {
-            return 3;
+    private class DeleteItem extends BaseAction {
+
+        public DeleteItem(int key, String name) {
+            super(key, name);
         }
 
         @Override
@@ -175,20 +160,15 @@ public class MenuTracker {
                 System.out.println("------------ Заявка не удалена -----------");
             }
         }
-
-        @Override
-        public String info() {
-            return "Delete Item.";
-        }
     }
 
     /**
      * Поиск заявки по ID.
      */
-    private class FindItemById implements UserAction {
-        @Override
-        public int key() {
-            return 4;
+    private class FindItemById extends BaseAction {
+
+        public FindItemById(int key, String name) {
+            super(key, name);
         }
 
         @Override
@@ -204,20 +184,15 @@ public class MenuTracker {
                 System.out.println("------------ Заявка с ID : " + id + " не найдена -----------");
             }
         }
-
-        @Override
-        public String info() {
-            return "Find item by ID.";
-        }
     }
 
     /**
      * Поиск заявок по имени.
      */
-    private class FindItemsByName implements UserAction {
-        @Override
-        public int key() {
-            return 5;
+    private class FindItemsByName extends BaseAction {
+
+        public FindItemsByName(int key, String name) {
+            super(key, name);
         }
 
         @Override
@@ -235,38 +210,24 @@ public class MenuTracker {
                 System.out.println("------------ Заявки с именем : " + name + " не найдены -----------");
             }
         }
-
-        @Override
-        public String info() {
-            return "Find item by name.";
-        }
     }
 
     /**
      * Выход из программы.
      */
-    private class ExitProgram implements UserAction {
+    private class ExitProgram extends BaseAction {
 
         private StartUI ui;
 
-        public ExitProgram(StartUI ui) {
+        public ExitProgram(StartUI ui, int key, String name) {
+            super(key, name);
             this.ui = ui;
-        }
-
-        @Override
-        public int key() {
-            return 6;
         }
 
         @Override
         public void execute(Input input, Tracker tracker) {
             System.out.println("------------ Выход из программы --------------");
             this.ui.closeProgram();
-        }
-
-        @Override
-        public String info() {
-            return "Exit program.";
         }
     }
 }
