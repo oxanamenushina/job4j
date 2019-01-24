@@ -30,7 +30,7 @@ public class Board {
      */
     public boolean move(Cell source, Cell dest) throws ImpossibleMoveException, OccupiedWayException, FigureNotFoundException {
         boolean rst = false;
-        try {
+
             int index = this.findBy(source);
             if (index == -1) {
                 throw new FigureNotFoundException();
@@ -43,13 +43,6 @@ public class Board {
                 rst = true;
                 this.figures[index] = this.figures[index].copy(dest);
             }
-        } catch (FigureNotFoundException fnf) {
-            System.out.println("There is no figure in this cell.");
-        } catch (ImpossibleMoveException ime) {
-            System.out.println("This figure can't move this way.");
-        } catch (OccupiedWayException owe) {
-            System.out.println("The figure's path is occupied.");
-        }
         return rst;
     }
 
@@ -82,7 +75,7 @@ public class Board {
     /**
      * Метод проверяет свободен ли путь фигуры.
      * @param steps
-     * @return true - путь свободен, false - путь занят.
+     * @return true - путь свободен, false - путь занятц.
      */
     private boolean isWayEmpty(Cell[] steps) {
         boolean rst = true;

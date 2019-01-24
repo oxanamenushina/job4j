@@ -59,25 +59,16 @@ public class Moving {
     public Cell[] straightWay(Cell source, Cell dest) {
         int count = dest.x - source.x != 0 ? Math.abs(dest.x - source.x) : Math.abs(dest.y - source.y);
         Cell[] steps = new Cell[count];
+        Cell step = Cell.A1;
         if (dest.x - source.x != 0) {
             int indX = (dest.x - source.x) > 0 ? 1 : -1;
             for (int i = 0; i < steps.length; i++) {
-                for (Cell cell : Cell.values()) {
-                    if (cell.x == source.x + indX * (i + 1) && cell.y == source.y) {
-                        steps[i] = cell;
-                        break;
-                    }
-                }
+                steps[i] = Cell.values()[(source.x + indX * (i + 1)) * 8 + source.y];
             }
         } else {
             int indY = (dest.y - source.y) > 0 ? 1 : -1;
             for (int i = 0; i < steps.length; i++) {
-                for (Cell cell : Cell.values()) {
-                    if (cell.x == source.x && cell.y == source.y + indY * (i + 1)) {
-                        steps[i] = cell;
-                        break;
-                    }
-                }
+                steps[i] = Cell.values()[source.x * 8 + source.y + indY * (i + 1)];
             }
         }
         return steps;
@@ -94,12 +85,7 @@ public class Moving {
         int indX = (dest.x - source.x) > 0 ? 1 : -1;
         int indY = (dest.y - source.y) > 0 ? 1 : -1;
         for (int i = 0; i < steps.length; i++) {
-            for (Cell cell : Cell.values()) {
-                if (cell.x == source.x + indX * (i + 1) && cell.y == source.y + indY * (i + 1)) {
-                    steps[i] = cell;
-                    break;
-                }
-            }
+            steps[i] = Cell.values()[(source.x + indX * (i + 1)) * 8 + source.y + indY * (i + 1)];
         }
         return steps;
     }
