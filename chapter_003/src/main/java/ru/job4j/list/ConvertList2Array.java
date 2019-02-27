@@ -22,15 +22,15 @@ public class ConvertList2Array {
         int[][] array = new int[rows][cells];
         int i = 0;
         int k = 0;
-            for (Integer num : list) {
-                array[k][i] = num;
-                if (i < cells - 1) {
-                    i++;
-                } else {
-                    i = 0;
-                    k++;
-                }
+        for (Integer num : list) {
+            array[k][i] = num;
+            if (i < cells - 1) {
+                i++;
+            } else {
+                i = 0;
+                k++;
             }
+        }
         return array;
     }
 }
