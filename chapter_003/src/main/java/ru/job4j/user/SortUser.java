@@ -1,5 +1,6 @@
 package ru.job4j.user;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -26,7 +27,7 @@ public class SortUser {
         Collections.sort(list, new Comparator<User>() {
             @Override
             public int compare(User o1, User o2) {
-                int result = Integer.compare(o1.getName().toCharArray().length, o2.getName().toCharArray().length);
+                int result = Integer.compare(o1.getName().length(), o2.getName().length());
                 return result != 0 ? result : Integer.compare(o1.getAge(), o2.getAge());
             }
         });

@@ -42,7 +42,7 @@ public class Point {
         System.out.println("y2 = " + b.y);
 
         double result = a.distanceTo(b);
-        System.out.println("Расстояние между точками А и В : " + result);
+        System.out.println(String.format("%s%f", "Расстояние между точками А и В : ", result));
     }
 
 }
