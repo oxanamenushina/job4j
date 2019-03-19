@@ -15,7 +15,7 @@ public class BankTransfers {
      * @param user пользователь
      */
     public void addUser(User user) {
-        this.users.put(user, null);
+        this.users.put(user, new ArrayList<>());
     }
 
     /**
@@ -61,7 +61,11 @@ public class BankTransfers {
      * @return лист со всеми счетами пользователя
      */
     public List<Account> getUserAccounts(String passport) {
-        return this.users.get(this.getUserByPassport(passport));
+        List<Account> accounts = new ArrayList<>();
+        if (this.getUserByPassport(passport) != null) {
+            accounts = this.users.get(this.getUserByPassport(passport));
+        }
+        return accounts;
     }
 
     /**
@@ -76,17 +80,11 @@ public class BankTransfers {
     public boolean transferMoney(String srcPassport, String srcRequisite,
                                  String destPassport, String destRequisite, double amount) {
         boolean result = false;
-        List<Account> srcAccounts = this.getUserAccounts(srcPassport);
-        Account srcAccount = this.getAccountByRequisite(srcRequisite);
-        List<Account> destAccounts = this.getUserAccounts(destPassport);
-        Account destAccount = this.getAccountByRequisite(destRequisite);
-        if (!this.users.isEmpty() && srcAccounts.indexOf(srcAccount) != -1 && srcAccount.getValue() >= amount) {
-            srcAccount.setValue(srcAccount.getValue() - amount);
-            srcAccounts.set(srcAccounts.indexOf(srcAccount), srcAccount);
-            this.users.replace(this.getUserByPassport(srcPassport), srcAccounts);
-            destAccount.setValue(destAccount.getValue() + amount);
-            destAccounts.set(destAccounts.indexOf(destAccount), destAccount);
-            this.users.replace(this.getUserByPassport(destPassport), destAccounts);
+        Account srcAccount = getAccountByPassportAndRequisite(srcPassport, srcRequisite);
+        Account destAccount = getAccountByPassportAndRequisite(destPassport, destRequisite);
+        if (srcAccount != null && destAccount != null && srcAccount.getValue() >= amount) {
+            this.changeValue(srcPassport, srcRequisite, srcAccount.getValue() - amount);
+            this.changeValue(destPassport, destRequisite, destAccount.getValue() + amount);
             result = true;
         }
         return result;
@@ -109,22 +107,34 @@ public class BankTransfers {
     }
 
     /**
-     * Метод возвращает счет по реквизитам.
+     * Метод возвращает счет по паспорту пользователя и реквизитам счета.
+     * @param passport паспорт пользователя
      * @param requisite реквизиты счета
      * @return счет
      */
-    private Account getAccountByRequisite(String requisite) {
+    private Account getAccountByPassportAndRequisite(String passport, String requisite) {
         Account account = null;
-        for (List<Account> accounts : this.users.values()) {
-            if (accounts != null) {
-                for (Account current : accounts) {
-                    if (current.getRequisites().equals(requisite)) {
-                        account = current;
-                        break;
-                    }
-                }
+        for (Account current : getUserAccounts(passport)) {
+            if (current.getRequisites().equals(requisite)) {
+                account = current;
+                break;
             }
         }
         return account;
+    }
+
+    /**
+     * Метод меняет количество денег на счете.
+     * @param passport паспорт пользователя
+     * @param requisite реквизиты счета
+     * @param value новая сумма
+     */
+    private void changeValue(String passport, String requisite, double value) {
+        Account account = getAccountByPassportAndRequisite(passport, requisite);
+        if (account != null) {
+            this.deleteAccountFromUser(passport, account);
+            account.setValue(value);
+            this.addAccountToUser(passport, account);
+        }
     }
 }
