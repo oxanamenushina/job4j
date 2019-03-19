@@ -83,13 +83,9 @@ public class BankTransfersTest {
         transfers.addAccountToUser("456", new Account(777, "account1"));
         transfers.addAccountToUser("123", new Account(888, "account2"));
         transfers.transferMoney("456", "account1", "123", "account2", 222);
-        Map<User, List<Account>> result = new HashMap<>();
-        result.put(transfers.getUserByPassport("123"), transfers.getUserAccounts("123"));
-        result.put(transfers.getUserByPassport("456"), transfers.getUserAccounts("456"));
-        Map<User, List<Account>> expect = new HashMap<>();
-        expect.put(transfers.getUserByPassport("123"), Arrays.asList(new Account(1110, "account2")));
-        expect.put(transfers.getUserByPassport("456"), Arrays.asList(new Account(555, "account1")));
-        assertThat(result, is(expect));
+        assertThat(Arrays.asList(transfers.getAccountByPassportAndRequisite("123",
+                "account2"), transfers.getAccountByPassportAndRequisite("456", "account1")),
+                is(Arrays.asList(new Account(1110, "account2"), new Account(555, "account1"))));
     }
 
     @Test
@@ -99,13 +95,9 @@ public class BankTransfersTest {
         transfers.addUser(new User("Foma", "456"));
         transfers.addAccountToUser("456", new Account(777, "account1"));
         transfers.addAccountToUser("123", new Account(111, "account2"));
-        transfers.transferMoney("123", "account2", "456", "account1", 555);
-        Map<User, List<Account>> result = new HashMap<>();
-        result.put(transfers.getUserByPassport("123"), transfers.getUserAccounts("123"));
-        result.put(transfers.getUserByPassport("456"), transfers.getUserAccounts("456"));
-        Map<User, List<Account>> expect = new HashMap<>();
-        expect.put(transfers.getUserByPassport("123"), Arrays.asList(new Account(111, "account2")));
-        expect.put(transfers.getUserByPassport("456"), Arrays.asList(new Account(777, "account1")));
-        assertThat(result, is(expect));
+        transfers.transferMoney("123", "account2", "456", "account1", 1000);
+        assertThat(Arrays.asList(transfers.getAccountByPassportAndRequisite("123",
+                "account2"), transfers.getAccountByPassportAndRequisite("456", "account1")),
+                is(Arrays.asList(new Account(111, "account2"), new Account(777, "account1"))));
     }
 }

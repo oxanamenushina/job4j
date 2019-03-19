@@ -83,8 +83,8 @@ public class BankTransfers {
         Account srcAccount = getAccountByPassportAndRequisite(srcPassport, srcRequisite);
         Account destAccount = getAccountByPassportAndRequisite(destPassport, destRequisite);
         if (srcAccount != null && destAccount != null && srcAccount.getValue() >= amount) {
-            this.changeValue(srcPassport, srcRequisite, srcAccount.getValue() - amount);
-            this.changeValue(destPassport, destRequisite, destAccount.getValue() + amount);
+            srcAccount.setValue(srcAccount.getValue() - amount);
+            destAccount.setValue(destAccount.getValue() + amount);
             result = true;
         }
         return result;
@@ -112,7 +112,7 @@ public class BankTransfers {
      * @param requisite реквизиты счета
      * @return счет
      */
-    private Account getAccountByPassportAndRequisite(String passport, String requisite) {
+    public Account getAccountByPassportAndRequisite(String passport, String requisite) {
         Account account = null;
         for (Account current : getUserAccounts(passport)) {
             if (current.getRequisites().equals(requisite)) {
@@ -121,20 +121,5 @@ public class BankTransfers {
             }
         }
         return account;
-    }
-
-    /**
-     * Метод меняет количество денег на счете.
-     * @param passport паспорт пользователя
-     * @param requisite реквизиты счета
-     * @param value новая сумма
-     */
-    private void changeValue(String passport, String requisite, double value) {
-        Account account = getAccountByPassportAndRequisite(passport, requisite);
-        if (account != null) {
-            this.deleteAccountFromUser(passport, account);
-            account.setValue(value);
-            this.addAccountToUser(passport, account);
-        }
     }
 }
