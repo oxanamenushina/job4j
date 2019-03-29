@@ -15,7 +15,7 @@ public class DepartmentTest {
     @Test
     public void whenOneAddMissedThenThree() {
         Department department = new Department();
-        assertThat(department.addMissed(new String[] {"K1\\SK1\\SSK1"}),
+        assertThat(department.addMissed(new String[] {"K1\\SK1\\SSK1"}).values().toArray(new String[0]),
                 arrayContainingInAnyOrder("K1", "K1\\SK1", "K1\\SK1\\SSK1")
         );
     }
@@ -23,7 +23,7 @@ public class DepartmentTest {
     @Test
     public void whenTwoAddMissedThenSix() {
         Department department = new Department();
-        assertThat(department.addMissed(new String[] {"K1\\SK1\\SSK1", "K2\\SK1\\SSK2"}),
+        assertThat(department.addMissed(new String[] {"K1\\SK1\\SSK1", "K2\\SK1\\SSK2"}).values().toArray(new String[0]),
                 arrayContainingInAnyOrder("K1", "K1\\SK1", "K1\\SK1\\SSK1", "K2", "K2\\SK1", "K2\\SK1\\SSK2")
         );
     }
