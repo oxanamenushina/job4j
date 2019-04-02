@@ -14,6 +14,7 @@ import static org.junit.Assert.assertThat;
  * @since 0.1
  */
 public class RangeFunctionTest {
+
     @Test
     public void whenLinearFunctionThenLinearResults() {
         RangeFunction function = new RangeFunction();

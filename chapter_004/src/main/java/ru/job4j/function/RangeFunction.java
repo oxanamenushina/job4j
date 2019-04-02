@@ -20,7 +20,7 @@ public class RangeFunction {
     public List<Double> diapason(int start, int end, Function<Double, Double> func) {
         List<Double> values = new ArrayList<>();
         for (int index = start; index < end; index++) {
-            values.add(func.apply((double)index));
+            values.add(func.apply((double) index));
         }
         return values;
     }
