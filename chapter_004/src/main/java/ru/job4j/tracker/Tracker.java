@@ -2,6 +2,7 @@ package ru.job4j.tracker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Tracker.
@@ -13,7 +14,7 @@ public class Tracker {
     private int position = 0;
 
     /**
-     * Метод реализаущий добавление заявки в хранилище.
+     * Метод, реализаущий добавление заявки в хранилище.
      * @param item новая заявка.
      * @return заявка.
      */
