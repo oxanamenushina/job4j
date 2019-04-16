@@ -31,13 +31,10 @@ public class Tracker {
      */
     public boolean replace(String id, Item item) {
         boolean result = false;
-        for (int i = 0; i < this.position; i++) {
-            if (id.equals(this.items.get(i).getId())) {
-                this.items.set(i, item);
-                item.setId(id);
-                result = true;
-                break;
-            }
+        if (this.findById(id) != null) {
+            this.items.set(this.items.indexOf(this.findById(id)), item);
+            item.setId(id);
+            result = true;
         }
         return result;
     }
@@ -49,13 +46,10 @@ public class Tracker {
      */
     public boolean delete(String id) {
         boolean result = false;
-        for (int i = 0; i < this.position; i++) {
-            if (id.equals(this.items.get(i).getId())) {
-                this.items.remove(i);
-                this.position--;
-                result = true;
-                break;
-            }
+        if (this.findById(id) != null) {
+            this.items.remove(this.findById(id));
+            this.position--;
+            result = true;
         }
         return result;
     }
@@ -74,13 +68,7 @@ public class Tracker {
      * @return Массив заявок с совпадающим именем.
      */
     public List<Item> findByName(String key) {
-        List<Item> copies = new ArrayList<>();
-        for (int i = 0; i < this.position; i++) {
-            if (key.equals(this.items.get(i).getName())) {
-                copies.add(this.items.get(i));
-            }
-        }
-        return copies;
+        return items.stream().filter(item -> item.getName().equals(key)).collect(Collectors.toList());
     }
 
     /**
@@ -89,14 +77,7 @@ public class Tracker {
      * @return Найденный Item или null.
      */
     public Item findById(String id) {
-        Item found = null;
-        for (int i = 0; i < this.position; i++) {
-            if (id.equals(this.items.get(i).getId())) {
-                found = this.items.get(i);
-                break;
-            }
-        }
-        return found;
+        return items.stream().filter(item -> item.getId().equals(id)).findFirst().orElse(null);
     }
 
     /**
