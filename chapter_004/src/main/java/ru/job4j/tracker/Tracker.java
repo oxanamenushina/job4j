@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Item.
+ * Tracker.
  *
  * @author Oxana Menushina (oxsm@mail.ru).
  */
@@ -13,8 +13,9 @@ public class Tracker {
     private int position = 0;
 
     /**
-     * Метод реализаущий добавление заявки в хранилище
-     * @param item новая заявка
+     * Метод реализаущий добавление заявки в хранилище.
+     * @param item новая заявка.
+     * @return заявка.
      */
     public Item add(Item item) {
         item.setId(this.generateId());
@@ -26,6 +27,7 @@ public class Tracker {
      * Метод заменяет заявку с заданным идентификатором в массиве.
      * @param id Идентификатор заменяемой заявки.
      * @param item Новая заявка.
+     * @return true - заявка заменена, false - нет.
      */
     public boolean replace(String id, Item item) {
         boolean result = false;
@@ -43,6 +45,7 @@ public class Tracker {
     /**
      * Метод находит заявку по идентификатору в массиве и удаляет ее.
      * @param id Идентификатор удаляемой заявки.
+     * @return true - заявка удалена, false - нет.
      */
     public boolean delete(String id) {
         boolean result = false;
