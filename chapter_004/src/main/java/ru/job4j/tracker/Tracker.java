@@ -32,8 +32,9 @@ public class Tracker {
      */
     public boolean replace(String id, Item item) {
         boolean result = false;
-        if (this.findById(id) != null) {
-            this.items.set(this.items.indexOf(this.findById(id)), item);
+        Item old = this.findById(id);
+        if (old != null) {
+            this.items.set(this.items.indexOf(old), item);
             item.setId(id);
             result = true;
         }
@@ -46,11 +47,9 @@ public class Tracker {
      * @return true - заявка удалена, false - нет.
      */
     public boolean delete(String id) {
-        boolean result = false;
-        if (this.findById(id) != null) {
-            this.items.remove(this.findById(id));
+        boolean result = this.items.removeIf(item -> item.getId().equals(id));
+        if (result) {
             this.position--;
-            result = true;
         }
         return result;
     }
