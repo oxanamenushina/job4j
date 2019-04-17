@@ -3,6 +3,7 @@ package ru.job4j.tracker;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Tracker.
@@ -31,10 +32,10 @@ public class Tracker {
      * @return true - заявка заменена, false - нет.
      */
     public boolean replace(String id, Item item) {
+        final int count = IntStream.range(0, items.size()).filter(i -> this.items.get(i).getId().equals(id)).findAny().orElse(-1);
         boolean result = false;
-        Item old = this.findById(id);
-        if (old != null) {
-            this.items.set(this.items.indexOf(old), item);
+        if (count >= 0) {
+            this.items.set(count, item);
             item.setId(id);
             result = true;
         }
