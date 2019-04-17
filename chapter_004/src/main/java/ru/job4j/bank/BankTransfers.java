@@ -1,7 +1,6 @@
 package ru.job4j.bank;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author Oxana Menushina (oxsm@mail.ru).
@@ -33,12 +32,11 @@ public class BankTransfers {
      * @param account новый счет
      */
     public void addAccountToUser(String passport, Account account) {
-        if (this.getUserByPassport(passport) != null) {
-            List<Account> accounts =
-                    this.users.putIfAbsent(this.getUserByPassport(passport), new ArrayList<>(Arrays.asList(account)));
+        User user = this.getUserByPassport(passport);
+        if (user != null) {
+            List<Account> accounts = this.users.putIfAbsent(user, new ArrayList<>(Arrays.asList(account)));
             if (accounts != null) {
                 accounts.add(account);
-                this.users.replace(this.getUserByPassport(passport), accounts);
             }
         }
     }
@@ -49,9 +47,9 @@ public class BankTransfers {
      * @param account удаляемый счет
      */
     public void deleteAccountFromUser(String passport, Account account) {
-        if (!this.users.isEmpty() && this.getUserByPassport(passport) != null) {
-            this.users.replace(this.getUserByPassport(passport), this.users.get(this.getUserByPassport(passport))
-                    .stream().filter(current -> !current.equals(account)).collect(Collectors.toList()));
+        User user = this.getUserByPassport(passport);
+        if (user != null) {
+            this.users.get(user).remove(account);
         }
     }
 
@@ -61,8 +59,8 @@ public class BankTransfers {
      * @return лист со всеми счетами пользователя
      */
     public List<Account> getUserAccounts(String passport) {
-        return this.getUserByPassport(passport) != null
-                ? this.users.get(this.getUserByPassport(passport)) : new ArrayList<>();
+        User user = this.getUserByPassport(passport);
+        return user != null ? this.users.get(user) : new ArrayList<>();
     }
 
     /**
