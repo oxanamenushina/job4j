@@ -40,7 +40,7 @@ public class ValidateBoardTest {
         assertThat(
                 this.mem.toString(),
                 is(
-                        String.format("There is no figure in this cell.\r\n")
+                        String.format("There is no figure in this cell.%n")
                 )
         );
     }
@@ -53,7 +53,7 @@ public class ValidateBoardTest {
         assertThat(
                 this.mem.toString(),
                 is(
-                        String.format("This figure can't move this way.\r\n")
+                        String.format("This figure can't move this way.%n")
                 )
         );
     }
@@ -67,7 +67,7 @@ public class ValidateBoardTest {
         assertThat(
                 this.mem.toString(),
                 is(
-                        String.format("The figure's path is occupied.\r\n")
+                        String.format("The figure's path is occupied.%n")
                 )
         );
     }
