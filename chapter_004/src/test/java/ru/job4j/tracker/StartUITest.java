@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -56,7 +55,7 @@ public class StartUITest {
     @Test
     public void whenUserAddItemThenTrackerHasNewItemWithSameName() {
         Tracker tracker = new Tracker();
-        Input input = new StubInput(Arrays.asList("0", "test name", "desc", "6"));
+        Input input = new StubInput(List.of("0", "test name", "desc", "6"));
         new StartUI(input, tracker, output).init();
         assertThat(tracker.findAll().get(0).getName(), is("test name"));
     }
@@ -65,7 +64,7 @@ public class StartUITest {
     public void whenUpdateThenTrackerHasUpdatedValue() {
         Tracker tracker = new Tracker();
         Item item = tracker.add(new Item("test name", "desc"));
-        Input input = new StubInput(Arrays.asList("2", item.getId(), "test replace", "заменили заявку", "6"));
+        Input input = new StubInput(List.of("2", item.getId(), "test replace", "заменили заявку", "6"));
         new StartUI(input, tracker, output).init();
         assertThat(tracker.findById(item.getId()).getName(), is("test replace"));
     }
@@ -74,7 +73,7 @@ public class StartUITest {
     public void whenUpdateThenTrackerNotUpdateValue() {
         Tracker tracker = new Tracker();
         Item item = tracker.add(new Item("test name", "desc"));
-        Input input = new StubInput(Arrays.asList("2", "неправильный ID", "test replace", "заменили заявку", "6"));
+        Input input = new StubInput(List.of("2", "неправильный ID", "test replace", "заменили заявку", "6"));
         new StartUI(input, tracker, output).init();
         assertThat(tracker.findById(item.getId()).getName(), is("test name"));
     }
@@ -84,10 +83,9 @@ public class StartUITest {
         Tracker tracker = new Tracker();
         Item first = tracker.add(new Item("test name1", "desc1"));
         Item second = tracker.add(new Item("test name2", "desc2"));
-        Input input = new StubInput(Arrays.asList("3", first.getId(), "6"));
-        List<Item> expect = Arrays.asList(second);
+        Input input = new StubInput(List.of("3", first.getId(), "6"));
         new StartUI(input, tracker, output).init();
-        assertThat(tracker.findAll(), is(expect));
+        assertThat(tracker.findAll(), is(List.of(second)));
     }
 
     @Test
@@ -95,10 +93,9 @@ public class StartUITest {
         Tracker tracker = new Tracker();
         Item first = tracker.add(new Item("test name1", "desc1"));
         Item second = tracker.add(new Item("test name2", "desc2"));
-        Input input = new StubInput(Arrays.asList("3", "неправильный ID", "6"));
-        List<Item> expect = Arrays.asList(first, second);
+        Input input = new StubInput(List.of("3", "неправильный ID", "6"));
         new StartUI(input, tracker, output).init();
-        assertThat(tracker.findAll(), is(expect));
+        assertThat(tracker.findAll(), is(List.of(first, second)));
     }
 
     @Test
@@ -106,7 +103,7 @@ public class StartUITest {
         Tracker tracker = new Tracker();
         Item first = tracker.add(new Item("test name1", "desc1"));
         Item second = tracker.add(new Item("test name2", "desc2"));
-        Input input = new StubInput(Arrays.asList("1", "6"));
+        Input input = new StubInput(List.of("1", "6"));
         new StartUI(input, tracker, output).init();
         assertThat(
                 new String(out.toByteArray()),
@@ -140,7 +137,7 @@ public class StartUITest {
         Tracker tracker = new Tracker();
         Item first = tracker.add(new Item("test name1", "desc1"));
         Item second = tracker.add(new Item("test name2", "desc2"));
-        Input input = new StubInput(Arrays.asList("4", second.getId(), "6"));
+        Input input = new StubInput(List.of("4", second.getId(), "6"));
         new StartUI(input, tracker, output).init();
         assertThat(
                 new String(out.toByteArray()),
@@ -169,7 +166,7 @@ public class StartUITest {
         Item first = tracker.add(new Item("test name1", "desc1"));
         Item second = tracker.add(new Item("test name1", "desc2"));
         Item third = tracker.add(new Item("test name3", "desc3"));
-        Input input = new StubInput(Arrays.asList("5", "test name1", "6"));
+        Input input = new StubInput(List.of("5", "test name1", "6"));
         new StartUI(input, tracker, output).init();
         assertThat(
                 new String(out.toByteArray()),
