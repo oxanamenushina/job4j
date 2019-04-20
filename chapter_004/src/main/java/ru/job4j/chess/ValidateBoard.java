@@ -13,11 +13,14 @@ public class ValidateBoard extends Board {
         try {
             rst = super.move(source, dest);
         } catch (FigureNotFoundException fnfe) {
-            System.out.println("There is no figure in this cell.");
+            System.out.print("There is no figure in this cell.");
+            System.out.print(System.lineSeparator());
         } catch (ImpossibleMoveException ime) {
-            System.out.println("This figure can't move this way.");
+            System.out.print("This figure can't move this way.");
+            System.out.print(System.lineSeparator());
         } catch (OccupiedWayException owe) {
-            System.out.println("The figure's path is occupied.");
+            System.out.print("The figure's path is occupied.");
+            System.out.print(System.lineSeparator());
         }
         return rst;
     }
