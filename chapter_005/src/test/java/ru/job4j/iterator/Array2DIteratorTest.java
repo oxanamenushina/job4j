@@ -6,6 +6,10 @@ import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+/**
+ * @version $Id$
+ * @since 0.1
+ */
 public class Array2DIteratorTest {
 
     private Array2DIterator it;
