@@ -14,19 +14,21 @@ public class EvenIterator implements Iterator {
     private int index = 0;
 
     public EvenIterator(int[] numbers) {
-        this.numbers = IntStream.of(numbers).filter(n -> n % 2 == 0).toArray();
+        this.numbers = numbers;
     }
 
     @Override
     public boolean hasNext() {
-        return index < numbers.length;
+        return index < numbers.length && !(IntStream.range(index, numbers.length)
+                .dropWhile(n -> numbers[n] % 2 != 0).findFirst().orElse(-1) == -1);
     }
 
     @Override
     public Object next() throws NoSuchElementException {
-        if (index >= numbers.length) {
+        if (!hasNext()) {
            throw new NoSuchElementException();
         }
+        index = IntStream.range(index, numbers.length).dropWhile(n -> numbers[n] % 2 != 0).findFirst().getAsInt();
         return numbers[index++];
     }
 }
