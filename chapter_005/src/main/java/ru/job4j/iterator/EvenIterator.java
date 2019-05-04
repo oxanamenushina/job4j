@@ -19,8 +19,10 @@ public class EvenIterator implements Iterator {
 
     @Override
     public boolean hasNext() {
-        return index < numbers.length && !(IntStream.range(index, numbers.length)
-                .dropWhile(n -> numbers[n] % 2 != 0).findFirst().orElse(-1) == -1);
+        int ind = index < numbers.length ? IntStream.range(index, numbers.length)
+                .dropWhile(n -> numbers[n] % 2 != 0).findFirst().orElse(-1) : -1;
+        index = ind != -1 ? ind : index;
+        return ind != -1;
     }
 
     @Override
@@ -28,7 +30,6 @@ public class EvenIterator implements Iterator {
         if (!hasNext()) {
            throw new NoSuchElementException();
         }
-        index = IntStream.range(index, numbers.length).dropWhile(n -> numbers[n] % 2 != 0).findFirst().getAsInt();
         return numbers[index++];
     }
 }
