@@ -37,8 +37,13 @@ public class SimpleArray<T> implements Iterable<T> {
      * @param index индекс заменяемого элемента.
      * @param model новый элемент.
      */
-    public void set(int index, T model) {
-        this.models[index] = model;
+    public boolean set(int index, T model) {
+        boolean result = false;
+        if (index < this.position) {
+            this.models[index] = model;
+            result = true;
+        }
+        return result;
     }
 
     /**
