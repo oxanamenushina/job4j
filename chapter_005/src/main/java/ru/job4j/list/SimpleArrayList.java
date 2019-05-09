@@ -27,7 +27,9 @@ public class SimpleArrayList<E> {
         E value = null;
         if (size > 0) {
             value = this.first.data;
+            Node<E> del = this.first;
             this.first = first.next;
+            del.next = null;
             this.size--;
         }
         return value;
