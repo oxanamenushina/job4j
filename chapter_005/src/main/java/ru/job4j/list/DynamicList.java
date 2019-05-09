@@ -15,16 +15,25 @@ public class DynamicList<E> implements Iterable<E> {
     private Object[] container = new Object[5];
     private int modCount = 0;
     private int expectedModCount = 0;
+    private int counter = 0;
 
     /**
      * Метод добавляет элемент в динамический список.
      * @param value добавляемый элемент.
      */
     public void add(E value) {
-        if (modCount >= container.length) {
-            container = Arrays.copyOf(container, modCount + 5);
+        if (counter >= container.length) {
+            expand();
         }
-        container[modCount++] = value;
+        container[counter++] = value;
+        modCount++;
+    }
+
+    /**
+     * Метод увеличивает длину массива.
+     */
+    private void expand() {
+        container = Arrays.copyOf(container, counter + 5);
     }
 
     /**
@@ -33,7 +42,7 @@ public class DynamicList<E> implements Iterable<E> {
      * @return элемент динамического массива с заданным индексом.
      */
     public E get(int index) {
-        return index < modCount ? (E) container[index] : null;
+        return index < counter ? (E) container[index] : null;
     }
 
     @Override
