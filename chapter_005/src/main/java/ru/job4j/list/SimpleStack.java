@@ -6,7 +6,7 @@ package ru.job4j.list;
  * @since 0.1
  */
 public class SimpleStack<T> {
-    SimpleArrayList<T> list = new SimpleArrayList<>();
+    private SimpleArrayList<T> list = new SimpleArrayList<>();
 
     /**
      * Метод помещает значение в коллекцию.
