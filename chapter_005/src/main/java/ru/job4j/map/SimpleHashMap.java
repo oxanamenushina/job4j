@@ -89,21 +89,12 @@ public class SimpleHashMap<K, V> implements Iterable {
 
     /**
      * Метод возвращает таблицу пар "ключ-значение" без null.
-     * @return таблица пар "ключ-значение" без null.
-     */
-    public Pair<K, V>[] getTable() {
-        return deleteNull(this.table);
-    }
-
-    /**
-     * Метод преобразует таблицу с null в таблицу без null.
-     * @param array таблица пар "ключ-значение".
      * @return таблица без null.
      */
-    private Pair<K, V>[] deleteNull(Pair<K, V>[] array) {
-        Pair<K, V>[] arr = (Pair<K, V>[]) new Pair[array.length];
+    public Pair<K, V>[] getTable() {
+        Pair<K, V>[] arr = (Pair<K, V>[]) new Pair[this.table.length];
         int ind = 0;
-        for (Pair<K, V> pair : array) {
+        for (Pair<K, V> pair : this.table) {
             if (pair != null) {
                 arr[ind++] = pair;
             }
@@ -122,10 +113,10 @@ public class SimpleHashMap<K, V> implements Iterable {
     private class TableIterator implements Iterator<Pair<K, V>> {
         private int expectedModCount = modCount;
         private int position = 0;
-        private Pair<K, V>[] arr;
+        private Pair<K, V>[] array;
 
         public TableIterator(Pair<K, V>[] array) {
-            this.arr = deleteNull(array);
+            this.array = array;
         }
 
         @Override
@@ -133,7 +124,10 @@ public class SimpleHashMap<K, V> implements Iterable {
             if (modCount > expectedModCount) {
                 throw new ConcurrentModificationException();
             }
-            return position < arr.length;
+            while (position < array.length && array[position] == null) {
+                position++;
+            }
+            return position < array.length;
         }
 
         @Override
@@ -141,7 +135,7 @@ public class SimpleHashMap<K, V> implements Iterable {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            return arr[position++];
+            return array[position++];
         }
     }
 
