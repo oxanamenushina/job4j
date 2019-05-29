@@ -19,7 +19,14 @@ public class Tree<E extends Comparable<E>> implements SimpleTree<E> {
     public boolean add(E parent, E child) {
         boolean result = false;
         Node<E> node = this.findBy(parent).orElse(null);
-        if (node != null && node.leaves().stream().noneMatch(n -> n.eqValue(child))) {
+        Node<E> copyChild = this.findBy(child).orElse(null);
+        if (copyChild == null) {
+            if (node == null) {
+                node = new Node<>(parent);
+                node.add(root);
+                root = node;
+                this.counter++;
+            }
             node.add(new Node<>(child));
             result = true;
             this.modCount++;

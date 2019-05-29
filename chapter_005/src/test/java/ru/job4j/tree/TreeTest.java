@@ -50,6 +50,29 @@ public class TreeTest {
     }
 
     @Test
+    public void whenChildAlreadyExistThenAddReturnFalse() {
+        Tree<Integer> tree = new Tree<>(1);
+        tree.add(1, 2);
+        tree.add(1, 3);
+        tree.add(2, 4);
+        assertThat(tree.add(2, 3), is(false));
+    }
+
+    @Test
+    public void whenParentDoesntExistThenParentBecomesRoot() {
+        Tree<Integer> tree = new Tree<>(1);
+        tree.add(1, 2);
+        tree.add(1, 3);
+        tree.add(5, 4);
+        Iterator it = tree.iterator();
+        assertThat(it.next(), is(5));
+        assertThat(it.next(), is(1));
+        assertThat(it.next(), is(4));
+        assertThat(it.next(), is(2));
+        assertThat(it.next(), is(3));
+    }
+
+    @Test
     public void forEachShouldReturnFiveElements() {
         Tree<Integer> tree = new Tree<>(1);
         tree.add(1, 2);
