@@ -37,7 +37,7 @@ public class ConsoleChat {
         StringBuilder log = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
             String inp = br.readLine();
-            while (!inp.equals("закончить")) {
+            while (!"закончить".equals(inp)) {
                 isStop(inp);
                 log.append(inp).append(System.lineSeparator());
                 if (!this.stop) {
@@ -88,10 +88,10 @@ public class ConsoleChat {
      * @param inp введенная фраза.
      */
     private void isStop(String inp) {
-        if (inp.equals("стоп")) {
+        if ("стоп".equals(inp)) {
             this.stop = true;
         }
-        if (inp.equals("продолжить")) {
+        if ("продолжить".equals(inp)) {
             this.stop = false;
         }
     }
