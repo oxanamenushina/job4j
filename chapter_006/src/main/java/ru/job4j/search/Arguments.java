@@ -29,9 +29,10 @@ public class Arguments {
         this.args.put("-n", null);
         this.args.put("-m", null);
         this.args.put("-f", null);
+        this.args.put("-r", null);
         this.args.put("-o", null);
         IntStream.range(0, input.length).forEach(i -> args.replace(input[i], null, (i < input.length - 1)
-                && !"-m".equals(input[i]) && !"-f".equals(input[i]) ? input[i + 1] : input[i]));
+                && !"-m".equals(input[i]) && !"-f".equals(input[i]) && !"-l".equals(input[i]) ? input[i + 1] : input[i]));
     }
 
     /**
@@ -45,10 +46,8 @@ public class Arguments {
     }
 
     /**
-     * Метод возвращает имя файла, маску,
-     * либо регулярное выражение для поиска файлов.
-     * @return имя файла, маску,
-     * либо регулярное выражение для поиска файлов.
+     * Метод возвращает имя файла или маску для поиска файлов.
+     * @return имя файла, маску для поиска файлов.
      */
     public String fileName() {
         return this.args.get("-n");
@@ -57,12 +56,24 @@ public class Arguments {
     /**
      * Метод возвращает критерий поиска файлов:
      * -m - искать по маске,
-     * -f - полное совпадение имени,
-     * -r - регулярное выражение.
+     * -f - полное совпадение имени.
      * @return критерий поиска файлов.
      */
     public String criterion() {
         return this.args.get("-m") != null ? "-m" : "-f";
+    }
+
+    /**
+     * Метод возвращает значение отличное от null,
+     * если нужно искать файлы с уровнем доступа только для чтения,
+     * null - если данный ключ не задан,
+     * т.е искать файлы с любым уровнем доступа.
+     * @return значение уровня доступа:
+     * null - поиск файлов с любым уровнем доступа,
+     * не null - поиск файлов с уровнем доступа только для чтения.
+     */
+    public String accessLevel() {
+        return this.args.get("-l");
     }
 
     /**

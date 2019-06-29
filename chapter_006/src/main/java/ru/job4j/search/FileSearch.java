@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.stream.IntStream;
@@ -19,6 +21,7 @@ public class FileSearch {
     private final String dir;
     private final String name;
     private final String crit;
+    private final String level;
     private final String output;
 
     public FileSearch(Arguments args) {
@@ -26,6 +29,7 @@ public class FileSearch {
         this.dir = args.directory();
         this.name = args.fileName();
         this.crit = args.criterion();
+        this.level = args.accessLevel();
         this.output = args.output();
     }
 
@@ -44,7 +48,8 @@ public class FileSearch {
                 for (File file : files) {
                     queue.offer(file);
                 }
-            } else if ("-m".equals(this.crit) ? equalsByMask(current.getName()) : this.name.equals(current)) {
+            } else if ("-m".equals(this.crit) ? equalsByMask(current.getName()) : this.name.equals(current.getName())
+                    && equalsByAccessLevel(current)) {
                 result.append(current.getName()).append(System.lineSeparator());
             }
         }
@@ -62,9 +67,15 @@ public class FileSearch {
                 .append(System.lineSeparator())
                 .append("-n - имя файла или маска;")
                 .append(System.lineSeparator())
-                .append("В маске символ * - произвольное количество (в том числе 0) любых символов;")
+                .append("В маске символ * - произвольное количество (в том числе 0) любых символов,")
+                .append(System.lineSeparator())
+                .append("символ ? - один любой символ;")
                 .append(System.lineSeparator())
                 .append("-m - искать по макс, либо -f - полное совпадение имени;")
+                .append(System.lineSeparator())
+                .append("-l - данный ключ пишется в параметрах только в том случае,")
+                .append(System.lineSeparator())
+                .append("если нужно искать файлы с уровнем доступа только для чтения;")
                 .append(System.lineSeparator())
                 .append("-o - файл для записи результата.")
                 .append(System.lineSeparator())
@@ -84,8 +95,20 @@ public class FileSearch {
     }
 
     /**
-     * Метод записывает имена найденных файлов в заданный файл.
+     * Метод зпроверяет соответствие уровня доступа к файлу
+     * с заданным уровнем доступа.
      * @param current проверяемый файл.
+     * @return true - файл соответствует заданному уровню доступа,
+     * false - нет.
+     */
+    private boolean equalsByAccessLevel(File current) {
+        Path cur = current.toPath();
+        return this.level != null ? !Files.isWritable(cur) && Files.isReadable(cur) : true;
+    }
+
+    /**
+     * Метод проверяет соответствие названия файла маске.
+     * @param current проверяемого файла.
      * @return true - файл соответствует маске, false - нет.
      */
     private boolean equalsByMask(String current) {
@@ -93,7 +116,8 @@ public class FileSearch {
         int indA = this.name.lastIndexOf(".");
         String[] nameArr = {current.substring(0, indN), current.substring(indN + 1)};
         String[] regArr = Stream.of(this.name.substring(0, indA), this.name.substring(indA + 1))
-                .map(n -> n.replaceAll("\\*", ".*")).toArray(String[]::new);
+                .map(n -> n.replaceAll("\\*", ".*").replaceAll("\\?", "."))
+                .toArray(String[]::new);
         return IntStream.range(0, nameArr.length).allMatch(i -> nameArr[i].matches(regArr[i]));
     }
 
