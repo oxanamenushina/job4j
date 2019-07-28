@@ -8,6 +8,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.collection.IsArrayContainingInAnyOrder.arrayContainingInAnyOrder;
 
 /**
  * @author Oxana Menushina (oxsm@mail.ru).
@@ -58,7 +59,7 @@ public class SearchTest {
         File file6 = new File(subDir3, "sixth.dwg");
         file6.createNewFile();
         Search search = new Search();
-        assertThat(search.files(System.getProperty("java.io.tmpdir"), List.of("txt", "dwg")),
-                is(List.of(file1, file4, file3, file6)));
+        assertThat(search.files(System.getProperty("java.io.tmpdir"), List.of("txt", "dwg")).toArray(new File[0]),
+                arrayContainingInAnyOrder(file1, file4, file3, file6));
     }
 }
