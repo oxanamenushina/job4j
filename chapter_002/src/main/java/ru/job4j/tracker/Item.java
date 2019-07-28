@@ -1,4 +1,7 @@
 package ru.job4j.tracker;
+
+import java.util.List;
+
 /**
  * Item.
  *
@@ -9,7 +12,7 @@ public class Item {
     private String name;
     private String desc;
     private long created;
-    private String[] comments;
+    private List<String> comments;
 
     public Item(String name, String desc, long created) {
         this.name = name;
@@ -54,11 +57,11 @@ public class Item {
         return this.created;
     }
 
-    public void setComments(String[] comments) {
+    public void setComments(List<String> comments) {
         this.comments = comments;
     }
 
-    public String[] getComments() {
+    public List<String> getComments() {
         return this.comments;
     }
 

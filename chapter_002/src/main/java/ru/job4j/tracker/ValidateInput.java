@@ -1,5 +1,7 @@
 package ru.job4j.tracker;
 
+import java.util.List;
+
 /**
  * @version $Id$
  * @since 0.1
@@ -24,7 +26,7 @@ public class ValidateInput implements Input {
      * @param range
      * @return ответ пользователя.
      */
-    public int ask(String question, int[] range) {
+    public int ask(String question, List<Integer> range) {
         boolean invalid = true;
         int value = -1;
         do {
@@ -32,9 +34,11 @@ public class ValidateInput implements Input {
                 value = this.input.ask(question, range);
                 invalid = false;
             } catch (MenuOutException moe) {
-                System.out.println("Please select key from menu.");
+                System.out.print("Please select key from menu.");
+                System.out.print(System.lineSeparator());
             } catch (NumberFormatException nfe) {
-                System.out.println("Please enter validate data again.");
+                System.out.print("Please enter validate data again.");
+                System.out.print(System.lineSeparator());
             }
         } while (invalid);
         return value;

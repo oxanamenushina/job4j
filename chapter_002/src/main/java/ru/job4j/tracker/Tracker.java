@@ -1,23 +1,27 @@
 package ru.job4j.tracker;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
- * Item.
+ * Tracker.
  *
  * @author Oxana Menushina (oxsm@mail.ru).
  */
 public class Tracker {
-    private final Item[] items = new Item[100];
+    private final List<Item> items = new ArrayList<>();
     private int position = 0;
 
     /**
-     * Метод реализаущий добавление заявки в хранилище
-     * @param item новая заявка
+     * Метод, реализаущий добавление заявки в хранилище.
+     * @param item новая заявка.
+     * @return заявка.
      */
     public Item add(Item item) {
         item.setId(this.generateId());
-        this.items[this.position++] = item;
+        this.items.add(this.position++, item);
         return item;
     }
 
@@ -25,16 +29,15 @@ public class Tracker {
      * Метод заменяет заявку с заданным идентификатором в массиве.
      * @param id Идентификатор заменяемой заявки.
      * @param item Новая заявка.
+     * @return true - заявка заменена, false - нет.
      */
     public boolean replace(String id, Item item) {
+        final int count = IntStream.range(0, items.size()).filter(i -> this.items.get(i).getId().equals(id)).findAny().orElse(-1);
         boolean result = false;
-        for (int i = 0; i < this.position; i++) {
-            if (id.equals(this.items[i].getId())) {
-                this.items[i] = item;
-                item.setId(id);
-                result = true;
-                break;
-            }
+        if (count >= 0) {
+            this.items.set(count, item);
+            item.setId(id);
+            result = true;
         }
         return result;
     }
@@ -42,16 +45,12 @@ public class Tracker {
     /**
      * Метод находит заявку по идентификатору в массиве и удаляет ее.
      * @param id Идентификатор удаляемой заявки.
+     * @return true - заявка удалена, false - нет.
      */
     public boolean delete(String id) {
-        boolean result = false;
-        for (int i = 0; i < this.position; i++) {
-            if (id.equals(this.items[i].getId())) {
-                System.arraycopy(this.items, i + 1, this.items, i, this.items.length - i - 1);
-                this.position--;
-                result = true;
-                break;
-            }
+        boolean result = this.items.removeIf(item -> item.getId().equals(id));
+        if (result) {
+            this.position--;
         }
         return result;
     }
@@ -60,8 +59,8 @@ public class Tracker {
      * Метод возвращает копию массива без null.
      * @return массив без null.
      */
-    public Item[] findAll() {
-        return Arrays.copyOf(this.items, this.position);
+    public List<Item> findAll() {
+        return this.items;
     }
 
     /**
@@ -69,15 +68,8 @@ public class Tracker {
      * @param key Имя искомых заявок.
      * @return Массив заявок с совпадающим именем.
      */
-    public Item[] findByName(String key) {
-        Item[] copies = new Item[100];
-        int j = 0;
-        for (int i = 0; i < this.position; i++) {
-            if (key.equals(this.items[i].getName())) {
-                copies[j++] = this.items[i];
-            }
-        }
-        return Arrays.copyOf(copies, j);
+    public List<Item> findByName(String key) {
+        return items.stream().filter(item -> item.getName().equals(key)).collect(Collectors.toList());
     }
 
     /**
@@ -86,14 +78,7 @@ public class Tracker {
      * @return Найденный Item или null.
      */
     public Item findById(String id) {
-        Item found = null;
-        for (int i = 0; i < this.position; i++) {
-            if (id.equals(this.items[i].getId())) {
-                found = this.items[i];
-                break;
-            }
-        }
-        return found;
+        return items.stream().filter(item -> item.getId().equals(id)).findFirst().orElse(null);
     }
 
     /**
