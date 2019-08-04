@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 public class MenuTracker {
 
     private Input input;
-    private Tracker tracker;
+    private ITracker tracker;
     private Consumer<String> output;
 
     private List<UserAction> actions = new ArrayList<>();
@@ -22,7 +22,7 @@ public class MenuTracker {
      * @param tracker объект типа Tracker.
      * @param output объект типа Consumer<String>.
      */
-    public MenuTracker(Input input, Tracker tracker, Consumer<String> output) {
+    public MenuTracker(Input input, ITracker tracker, Consumer<String> output) {
         this.input = input;
         this.tracker = tracker;
         this.output = output;
@@ -78,7 +78,7 @@ public class MenuTracker {
         }
 
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             String name = input.ask("Введите имя заявки :");
             String desc = input.ask("Введите описание заявки :");
             Item item = new Item(name, desc);
@@ -100,7 +100,7 @@ public class MenuTracker {
         }
 
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             List<Item> items = tracker.findAll();
             for (Item item : items) {
                 output.accept(String.format("Заявка с ID: %s%nИмя заявки: %s%nОписание заявки: %s",
@@ -119,7 +119,7 @@ public class MenuTracker {
         }
 
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             String id = input.ask("Введите ID заявки :");
             String name = input.ask("Введите имя новой заявки :");
             String desc = input.ask("Введите описание новой заявки :");
@@ -144,7 +144,7 @@ public class MenuTracker {
         }
 
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             String id = input.ask("Введите ID заявки :");
             boolean result = tracker.delete(id);
             if (result) {
@@ -165,7 +165,7 @@ public class MenuTracker {
         }
 
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             String id = input.ask("Введите ID заявки :");
             Item item = tracker.findById(id);
             if (item != null) {
@@ -187,7 +187,7 @@ public class MenuTracker {
         }
 
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             String name = input.ask("Введите имя заявки :");
             List<Item> items = tracker.findByName(name);
             if (items.size() != 0) {
@@ -213,7 +213,7 @@ public class MenuTracker {
         }
 
         @Override
-        public void execute(Input input, Tracker tracker) {
+        public void execute(Input input, ITracker tracker) {
             output.accept("------------ Выход из программы --------------");
             this.ui.closeProgram();
         }

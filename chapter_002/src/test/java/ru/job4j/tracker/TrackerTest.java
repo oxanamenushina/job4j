@@ -14,7 +14,7 @@ public class TrackerTest {
 
     @Test
     public void whenAddNewItemThenTrackerHasSameItem() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         Item item = new Item("test1", "testDescription", 123L);
         tracker.add(item);
         assertThat(tracker.findAll().get(0), is(item));
@@ -22,7 +22,7 @@ public class TrackerTest {
 
     @Test
     public void whenReplaceNameThenReturnNewName() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         Item previous = new Item("test1", "testDescription", 123L);
         tracker.add(previous);
         Item next = new Item("test2", "testDescription2", 1234L);
@@ -33,7 +33,7 @@ public class TrackerTest {
 
     @Test
     public void whenDeleteIdThenReturnNextName() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         tracker.add(new Item("test1", "testDescription", 123L));
         Item second = new Item("test2", "testDescription2", 1234L);
         tracker.add(second);
@@ -45,7 +45,7 @@ public class TrackerTest {
 
     @Test
     public void whenFindAllThenReturnAnotherMassive() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         Item first = new Item("test1", "testDescription", 123L);
         tracker.add(first);
         Item second = new Item("test2", "testDescription2", 1234L);
@@ -58,7 +58,7 @@ public class TrackerTest {
 
     @Test
     public void whenFindByNameThenReturnMassiveThisName() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         Item first = new Item("test1", "testDescription", 123L);
         tracker.add(first);
         Item second = new Item("test2", "testDescription2", 1234L);
@@ -70,7 +70,7 @@ public class TrackerTest {
 
     @Test
     public void whenFindByIdThenReturnThisItem() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         Item first = new Item("test1", "testDescription", 123L);
         tracker.add(first);
         Item second = new Item("test2", "testDescription2", 1234L);

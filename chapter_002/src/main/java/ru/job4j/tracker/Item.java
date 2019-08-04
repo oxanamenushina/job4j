@@ -1,6 +1,7 @@
 package ru.job4j.tracker;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Item.
@@ -65,4 +66,23 @@ public class Item {
         return this.comments;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Item item = (Item) o;
+        return created == item.created
+                && id.equals(item.id)
+                && name.equals(item.name)
+                && desc.equals(item.desc);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, desc, created);
+    }
 }

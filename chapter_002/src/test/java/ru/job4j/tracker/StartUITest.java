@@ -54,7 +54,7 @@ public class StartUITest {
 
     @Test
     public void whenUserAddItemThenTrackerHasNewItemWithSameName() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         Input input = new StubInput(List.of("0", "test name", "desc", "6"));
         new StartUI(input, tracker, output).init();
         assertThat(tracker.findAll().get(0).getName(), is("test name"));
@@ -62,7 +62,7 @@ public class StartUITest {
 
     @Test
     public void whenUpdateThenTrackerHasUpdatedValue() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         Item item = tracker.add(new Item("test name", "desc"));
         Input input = new StubInput(List.of("2", item.getId(), "test replace", "заменили заявку", "6"));
         new StartUI(input, tracker, output).init();
@@ -71,7 +71,7 @@ public class StartUITest {
 
     @Test
     public void whenUpdateThenTrackerNotUpdateValue() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         Item item = tracker.add(new Item("test name", "desc"));
         Input input = new StubInput(List.of("2", "неправильный ID", "test replace", "заменили заявку", "6"));
         new StartUI(input, tracker, output).init();
@@ -80,7 +80,7 @@ public class StartUITest {
 
     @Test
     public void whenDeleteThenTrackerDeleteItem() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         Item first = tracker.add(new Item("test name1", "desc1"));
         Item second = tracker.add(new Item("test name2", "desc2"));
         Input input = new StubInput(List.of("3", first.getId(), "6"));
@@ -90,7 +90,7 @@ public class StartUITest {
 
     @Test
     public void whenDeleteThenTrackerNotDeleteItem() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         Item first = tracker.add(new Item("test name1", "desc1"));
         Item second = tracker.add(new Item("test name2", "desc2"));
         Input input = new StubInput(List.of("3", "неправильный ID", "6"));
@@ -100,7 +100,7 @@ public class StartUITest {
 
     @Test
     public void whenFindAllThenTrackerShowAllItems() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         Item first = tracker.add(new Item("test name1", "desc1"));
         Item second = tracker.add(new Item("test name2", "desc2"));
         Input input = new StubInput(List.of("1", "6"));
@@ -134,7 +134,7 @@ public class StartUITest {
 
     @Test
     public void whenFindByIdThenTrackerShowItemWithSameId() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         Item first = tracker.add(new Item("test name1", "desc1"));
         Item second = tracker.add(new Item("test name2", "desc2"));
         Input input = new StubInput(List.of("4", second.getId(), "6"));
@@ -162,7 +162,7 @@ public class StartUITest {
 
     @Test
     public void whenFindByNameThenTrackerShowItemWithSameName() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         Item first = tracker.add(new Item("test name1", "desc1"));
         Item second = tracker.add(new Item("test name1", "desc2"));
         Item third = tracker.add(new Item("test name3", "desc3"));
