@@ -17,9 +17,12 @@ public class TtiangleTest {
                 triangle.draw(),
                 is(
                         new StringBuilder()
-                        .append("   *   \r\n")
-                        .append("  ***  \r\n")
-                        .append(" ***** \r\n")
+                        .append("   *   ")
+                        .append(System.lineSeparator())
+                        .append("  ***  ")
+                        .append(System.lineSeparator())
+                        .append(" ***** ")
+                        .append(System.lineSeparator())
                         .append("*******")
                         .toString()
                 )

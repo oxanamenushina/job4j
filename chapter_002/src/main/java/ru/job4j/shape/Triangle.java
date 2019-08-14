@@ -9,9 +9,9 @@ public class Triangle implements Shape {
      */
     public String draw() {
         StringBuilder builder = new StringBuilder();
-        builder.append("   *   \r\n");
-        builder.append("  ***  \r\n");
-        builder.append(" ***** \r\n");
+        builder.append("   *   ").append(System.lineSeparator());
+        builder.append("  ***  ").append(System.lineSeparator());
+        builder.append(" ***** ").append(System.lineSeparator());
         builder.append("*******");
         return builder.toString();
     }
