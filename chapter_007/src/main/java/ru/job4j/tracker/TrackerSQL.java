@@ -119,8 +119,8 @@ public class TrackerSQL implements ITracker, AutoCloseable {
     @Override
     public boolean replace(String id, Item item) {
         int count = 0;
-        int size = this.findById(id).getComments().size();
         int required = Integer.parseInt(id);
+        boolean rst = this.deleteComments(required);
         try (PreparedStatement ps = connection.prepareStatement(
                 "update tracker_items set name = ?, description = ?, creation_time = ? where id = ?")) {
             ps.setString(1, item.getName());
@@ -131,8 +131,7 @@ public class TrackerSQL implements ITracker, AutoCloseable {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return count > 0 && (size == 0 || this.deleteComments(required))
-                && ((item.getComments() == null) || this.insertComments(item, required));
+        return (count > 0 && rst) && ((item.getComments() == null) || this.insertComments(item, required));
     }
 
     /**
@@ -144,14 +143,14 @@ public class TrackerSQL implements ITracker, AutoCloseable {
     public boolean delete(String id) {
         int count = 0;
         int required = Integer.parseInt(id);
-        int size = this.findById(id).getComments().size();
+        boolean rst = this.deleteComments(required);
         try (PreparedStatement ps = connection.prepareStatement("delete from tracker_items where id = ?")) {
             ps.setInt(1, required);
             count = ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return count > 0 && (size == 0 || this.deleteComments(required));
+        return count > 0 && rst;
     }
 
     /**
@@ -200,9 +199,9 @@ public class TrackerSQL implements ITracker, AutoCloseable {
             ps.setInt(1, Integer.parseInt(id));
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                String name = rs.getString(2);
-                String desc = rs.getString(3);
-                long created = rs.getLong(4);
+                String name = rs.getString("name");
+                String desc = rs.getString("description");
+                long created = rs.getLong("creation_time");
                 item = new Item(name, desc, created);
                 item.setId(id);
                 item.setComments(this.selectComments(Integer.parseInt(id)));
@@ -242,13 +241,16 @@ public class TrackerSQL implements ITracker, AutoCloseable {
      * @return true - комментарии успешно удалены из базы данных, false - нет.
      */
     private boolean deleteComments(int id) {
-        boolean rst = false;
-        try (PreparedStatement ps = connection.prepareStatement("delete from item_comments where id_item = ?")) {
-            ps.setInt(1, id);
-            int count = ps.executeUpdate();
-            rst = count > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        boolean rst = true;
+        Item item = this.findById(Integer.toString(id));
+        if (item.getComments() != null && item.getComments().size() > 0) {
+            try (PreparedStatement ps = connection.prepareStatement("delete from item_comments where id_item = ?")) {
+                ps.setInt(1, id);
+                int count = ps.executeUpdate();
+                rst = count > 0;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return rst;
     }
@@ -266,7 +268,7 @@ public class TrackerSQL implements ITracker, AutoCloseable {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(rs.getString(1));
+                list.add(rs.getString("comment_text"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -282,11 +284,11 @@ public class TrackerSQL implements ITracker, AutoCloseable {
     private List<Item> getItems(ResultSet rs) throws SQLException {
         List<Item> items = new ArrayList<>();
         while (rs.next()) {
-            String name = rs.getString(2);
-            String desc = rs.getString(3);
-            long created = rs.getLong(4);
+            String name = rs.getString("name");
+            String desc = rs.getString("description");
+            long created = rs.getLong("creation_time");
             Item item = new Item(name, desc, created);
-            int id = rs.getInt(1);
+            int id = rs.getInt("id");
             item.setId(Integer.toString(id));
             List<String> list = this.selectComments(id);
             item.setComments(list);

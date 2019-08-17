@@ -48,7 +48,9 @@ public class TrackerSQLTest {
         try (TrackerSQL tracker = new TrackerSQL()) {
             tracker.init();
             Item first = tracker.add(new Item("test5", "testDescription", 123L));
-            Item second = tracker.add(new Item("test6", "testDescription2", 1234L));
+            Item it = new Item("test6", "testDescription2", 1234L);
+            it.setComments(List.of("111", "222", "333"));
+            Item second = tracker.add(it);
             Item third = tracker.add(new Item("test7", "testDescription3", 12345L));
             tracker.delete(second.getId());
             assertThat(tracker.findAll().get(1).getName(), is("test7"));
