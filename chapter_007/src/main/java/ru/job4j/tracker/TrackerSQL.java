@@ -16,6 +16,10 @@ public class TrackerSQL implements ITracker, AutoCloseable {
 
     private Connection connection;
 
+    public TrackerSQL(Connection connection) {
+        this.connection = connection;
+    }
+
     /**
      * Соединение с базой данных.
      * @return true - соединение успешно установлено, иначе - false.
@@ -33,49 +37,7 @@ public class TrackerSQL implements ITracker, AutoCloseable {
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
-        this.createTables();
         return this.connection != null;
-    }
-
-    /**
-     * Метод создает таблицы.
-     */
-    public void createTables() {
-        try (Statement st = connection.createStatement()) {
-            if (!this.tableExistenceCheck("tracker_items")) {
-                st.execute("create table tracker_items("
-                        + "id serial primary key, "
-                        + "name varchar(100), "
-                        + "description varchar(2000), "
-                        + "creation_time int8);"
-                );
-            }
-            if (!this.tableExistenceCheck("item_comments")) {
-                st.execute("create table item_comments("
-                        + "id serial primary key, "
-                        + "comment_text varchar(2000), "
-                        + "id_item int references tracker_items(id));"
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Метод проверяет существует ли заданная таблица.
-     * @param name название таблицы.
-     * @return true - таблица уже существует,
-     * false - таблицы с данным именем не существует.
-     */
-    private boolean tableExistenceCheck(String name) {
-        boolean result = false;
-        try (ResultSet rs = connection.getMetaData().getTables(null, null, name, null)) {
-            result = rs.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return result;
     }
 
     /**
