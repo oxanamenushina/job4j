@@ -104,4 +104,72 @@ public class InteractCalcTest {
                 is("Result: 5.0" + System.lineSeparator() + System.lineSeparator()
                         + "Result: 12.0" + System.lineSeparator() + System.lineSeparator()));
     }
+
+    @Test
+    public void whenSin30ThenInteractCalcReturnResult05() {
+        EngCalculator calc = new EngCalculator();
+        Actions acts = new EngCalcActions(calc, new InterCalcActions(new Calculator()));
+        InteractCalc ic = new InteractCalc(new StubInput(List.of("sin", "30", "exit"),
+                new CheckInput(acts)), output, acts);
+        ic.calculate();
+        assertThat(out.toString(),
+                is(new StringBuilder()
+                        .append("Result: ")
+                        .append(Math.sin(Math.toRadians(30)))
+                        .append(System.lineSeparator())
+                        .append(System.lineSeparator())
+                        .toString()));
+    }
+
+    @Test
+    public void whenCos180ThenInteractCalcReturnResultMinus1() {
+        EngCalculator calc = new EngCalculator();
+        Actions acts = new EngCalcActions(calc, new InterCalcActions(new Calculator()));
+        InteractCalc ic = new InteractCalc(new StubInput(List.of("cos", "180", "exit"),
+                new CheckInput(acts)), output, acts);
+        ic.calculate();
+        assertThat(out.toString(),
+                is(new StringBuilder()
+                        .append("Result: ")
+                        .append(Math.cos(Math.toRadians(180)))
+                        .append(System.lineSeparator())
+                        .append(System.lineSeparator())
+                        .toString()));
+    }
+
+    @Test
+    public void whenTangent45ThenInteractCalcReturnResult1() {
+        EngCalculator calc = new EngCalculator();
+        Actions acts = new EngCalcActions(calc, new InterCalcActions(new Calculator()));
+        InteractCalc ic = new InteractCalc(new StubInput(List.of("tg", "45", "exit"),
+                new CheckInput(acts)), output, acts);
+        ic.calculate();
+        assertThat(out.toString(),
+                is(new StringBuilder()
+                        .append("Result: ")
+                        .append(Math.tan(Math.toRadians(45)))
+                        .append(System.lineSeparator())
+                        .append(System.lineSeparator())
+                        .toString()));
+    }
+
+    @Test
+    public void whenSin90And8MultiplyByResultThenInteractCalcReturnResult8() {
+        EngCalculator calc = new EngCalculator();
+        Actions acts = new EngCalcActions(calc, new InterCalcActions(new Calculator()));
+        InteractCalc ic = new InteractCalc(new StubInput(List.of("sin", "90", "*", "8", "m", "exit"),
+                new CheckInput(acts)), output, acts);
+        ic.calculate();
+        assertThat(out.toString(),
+                is(new StringBuilder()
+                        .append("Result: ")
+                        .append(Math.sin(Math.toRadians(90)))
+                        .append(System.lineSeparator())
+                        .append(System.lineSeparator())
+                        .append("Result: ")
+                        .append(Math.sin(Math.toRadians(90)) * 8)
+                        .append(System.lineSeparator())
+                        .append(System.lineSeparator())
+                        .toString()));
+    }
 }
