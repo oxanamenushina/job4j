@@ -1,5 +1,6 @@
 package ru.job4j.products;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -23,5 +24,15 @@ public class ControlQuality<T extends Product> {
      */
     public void directAllProducts(List<T> products) {
         products.forEach(p -> this.storages.stream().filter(s -> s.checkCondition(p)).forEach(s -> s.put(p)));
+    }
+
+    /**
+     * The method retrieves all products
+     * from the stores and redistributes them again.
+     */
+    public void resort() {
+        List<T> products = new LinkedList<>();
+        this.storages.forEach(s -> products.addAll(s.removeProducts()));
+        this.directAllProducts(products);
     }
 }

@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -159,5 +160,26 @@ public class ControlQualityTest {
         assertThat(recycling.getProducts(), is(List.of(sixth)));
         assertThat(first.getTotalPrice(), is(555.5));
         assertThat(fifth.getTotalPrice(), is(51.0));
+    }
+
+    @Test
+    public void  whenResortThenAllProductsAreRedistributedAgain() {
+        Storage<Product> warehouse = new Warehouse<>();
+        Storage<Product> shop = new Shop<>();
+        Storage<Product> trash = new Trash<>();
+        LocalDate today = LocalDate.now();
+        Product first = new Food("Cake", today.minusDays(3), today.plusDays(4), 555.5, 0.3);
+        Product second = new Food("Coffee", today.minusDays(15), today.plusDays(350), 383.9, 0.2);
+        Product third = new Food("Cheese", today.minusDays(25), today.plusDays(5), 580, 0.25);
+        Product fourth = new Food("Ice cream", today.minusDays(95), today.minusDays(5), 78.9, 0.15);
+        ControlQuality<Product> cq = new ControlQuality<>(List.of(trash, warehouse, shop));
+        warehouse.put(first);
+        shop.put(second);
+        trash.put(third);
+        trash.put(fourth);
+        cq.resort();
+        assertThat(warehouse.getProducts(), is(List.of(second)));
+        assertThat(shop.getProducts(), containsInAnyOrder(first, third));
+        assertThat(trash.getProducts(), is(List.of(fourth)));
     }
 }

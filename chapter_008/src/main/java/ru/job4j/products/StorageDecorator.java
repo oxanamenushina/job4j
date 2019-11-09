@@ -31,4 +31,9 @@ public abstract class StorageDecorator<T extends Product> implements Storage<T> 
     public List<T> getProducts() {
         return this.storage.getProducts();
     }
+
+    @Override
+    public List<T> removeProducts() {
+        return this.storage.removeProducts();
+    }
 }

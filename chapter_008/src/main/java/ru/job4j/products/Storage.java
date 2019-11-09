@@ -32,4 +32,10 @@ public interface Storage<T> {
      * @return list of products.
      */
     List<T> getProducts();
+
+    /**
+     * The method removes all products stored in storage.
+     * @return list of products.
+     */
+    List<T> removeProducts();
 }

@@ -40,4 +40,11 @@ public abstract class BaseStorage<T extends Product> implements Storage<T> {
     public List<T> getProducts() {
         return this.products;
     }
+
+    @Override
+    public List<T> removeProducts() {
+        List<T> prods = new LinkedList<>(this.getProducts());
+        this.products.clear();
+        return prods;
+    }
 }
