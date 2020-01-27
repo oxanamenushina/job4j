@@ -39,14 +39,14 @@ public class RectangleMove implements Runnable {
 
     @Override
     public void run() {
-        while (true) {
+        while (!Thread.currentThread().isInterrupted()) {
             this.setDirection();
             this.rect.setX(this.rect.getX() + this.direction[0]);
             this.rect.setY(this.rect.getY() + this.direction[1]);
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Thread.currentThread().interrupt();
             }
         }
     }
