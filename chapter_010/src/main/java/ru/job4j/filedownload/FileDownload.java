@@ -44,6 +44,8 @@ public class FileDownload implements Runnable {
      */
     private int sum = 0;
 
+    private long initialTime;
+
     public FileDownload(String link, String output, int speed) {
         this.link = link;
         this.output = output;
@@ -55,15 +57,14 @@ public class FileDownload implements Runnable {
         try (BufferedInputStream bis = new BufferedInputStream(new URL(this.link).openStream());
              FileOutputStream fos = new FileOutputStream(this.output)) {
             byte[] dataBuffer = new byte[1024];
+            this.initialTime = System.currentTimeMillis();
             while ((this.bytesRead = bis.read(dataBuffer, 0, 1024)) != -1) {
                 fos.write(dataBuffer, 0, this.bytesRead);
                 this.sum++;
-                if (this.pause > 0) {
-                    try {
-                        Thread.sleep(this.pause);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                    }
+                try {
+                    Thread.sleep(this.pause);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 }
             }
         } catch (IOException e) {
@@ -82,10 +83,13 @@ public class FileDownload implements Runnable {
      * The method calculates pause.
      */
     public void calculatePause() {
-        if (this.sum > this.speed) {
-            this.pause = 1000 / this.sum - 1000 / this.speed;
+        long currentTime = System.currentTimeMillis();
+        int time = (int) (currentTime - this.initialTime);
+        if (time > 0 && this.sum / time > this.speed / 1000) {
+            this.pause = 1000 / this.speed - time / this.sum;
         }
         this.sum = 0;
+        this.initialTime = currentTime;
     }
 
     public static void main(String[] args) {
@@ -96,7 +100,7 @@ public class FileDownload implements Runnable {
         t1.start();
         while (fd.getBytesRead() != -1) {
             try {
-                Thread.sleep(1000);
+                Thread.sleep(1000 / 200);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
