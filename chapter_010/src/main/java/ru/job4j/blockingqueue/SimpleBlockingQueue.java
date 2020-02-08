@@ -57,4 +57,13 @@ public class SimpleBlockingQueue<T> {
         notifyAll();
         return value;
     }
+
+    /**
+     * The method checks if the queue is empty.
+     * @return true - the queue is empty,
+     * false - the queue isn't empty.
+     */
+    public synchronized boolean isEmpty() {
+        return this.queue.isEmpty();
+    }
 }
