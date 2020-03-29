@@ -12,4 +12,13 @@
         <servlet-name>EchoServlet</servlet-name>
         <url-pattern>/echo</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>CrudServlet</servlet-name>
+        <servlet-class>ru.job4j.crudservlet.UserServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CrudServlet</servlet-name>
+        <url-pattern>/crud</url-pattern>
+    </servlet-mapping>
 </web-app>
