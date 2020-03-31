@@ -34,7 +34,7 @@ public class UsersServlet extends HttpServlet {
         resp.setContentType("text/html");
         String id = req.getParameter("id");
         this.logic.delete(new User(id != null ? Integer.parseInt(id) : -1, null, null, null));
-        this.doGet(req, resp);
+        resp.sendRedirect(String.format("%s/users/userlist/UserList.jsp", req.getContextPath()));
     }
 
     private String getText(String path) {

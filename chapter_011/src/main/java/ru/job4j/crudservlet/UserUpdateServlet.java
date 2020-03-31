@@ -39,7 +39,7 @@ public class UserUpdateServlet extends HttpServlet {
                 req.getParameter("login"),
                 req.getParameter("email")
         ));
-        resp.sendRedirect(String.format("%s/list", req.getContextPath()));
+        resp.sendRedirect(String.format("%s/users/userlist/UserList.jsp", req.getContextPath()));
     }
 
     private String getText(String path, User user) {

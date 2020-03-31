@@ -32,7 +32,7 @@ public class UserCreateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
         logic.add(new User(req.getParameter("name"), req.getParameter("login"), req.getParameter("email")));
-        resp.sendRedirect(String.format("%s/list", req.getContextPath()));
+        resp.sendRedirect(String.format("%s/users/userlist/UserList.jsp", req.getContextPath()));
     }
 
     private String getText(String path) {
