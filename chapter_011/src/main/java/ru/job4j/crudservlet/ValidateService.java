@@ -19,7 +19,7 @@ public class ValidateService implements Validate {
     /**
      * The instance of MemoryStore class.
      */
-    private final Store store = MemoryStore.getInstance();
+    private final Store store = DBStore.getInstance();
 
     /**
      * The template for the user name.
