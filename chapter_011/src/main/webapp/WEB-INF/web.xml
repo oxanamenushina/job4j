@@ -45,4 +45,30 @@
         <servlet-name>UserUpdateServlet</servlet-name>
         <url-pattern>/edit</url-pattern>
     </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>User List Controller</servlet-name>
+        <servlet-class>ru.job4j.crudservlet.UserListController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>User List Controller</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>User Create Controller</servlet-name>
+        <servlet-class>ru.job4j.crudservlet.UserCreateController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>User Create Controller</servlet-name>
+        <url-pattern>/create-user</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>User Update Controller</servlet-name>
+        <servlet-class>ru.job4j.crudservlet.UserUpdateController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>User Update Controller</servlet-name>
+        <url-pattern>/update-user</url-pattern>
+    </servlet-mapping>
 </web-app>
