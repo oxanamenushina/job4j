@@ -63,11 +63,12 @@ public class DBStore implements Store {
     public void add(User user) {
         try (Connection connection = SOURCE.getConnection();
              PreparedStatement st = connection.prepareStatement(
-                     "insert into user_servlet (name, login, email, creation_date) values (?, ?, ?, ?)")) {
+                     "insert into users (name, login, email, photo, creation_date) values (?, ?, ?, ?, ?)")) {
             st.setString(1, user.getName());
             st.setString(2, user.getLogin());
             st.setString(3, user.getEmail());
-            st.setString(4, new SimpleDateFormat("yyyy-MM-dd").format(new GregorianCalendar().getTime()));
+            st.setString(4, user.getPhotoId());
+            st.setString(5, new SimpleDateFormat("yyyy-MM-dd").format(new GregorianCalendar().getTime()));
             st.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -83,11 +84,13 @@ public class DBStore implements Store {
         User oldUser = this.findById(newUser.getId());
         try (Connection connection = SOURCE.getConnection();
              PreparedStatement st = connection.prepareStatement(
-                     "update user_servlet set name = ?, login = ?, email = ? where id = ?")) {
+                     "update users set name = ?, login = ?, email = ?, photo = ? where id = ?")) {
             st.setString(1, newUser.getName() == null ? oldUser.getName() : newUser.getName());
             st.setString(2, newUser.getLogin() == null ? oldUser.getLogin() : newUser.getLogin());
             st.setString(3, newUser.getEmail() == null ? oldUser.getEmail() : newUser.getEmail());
-            st.setInt(4, newUser.getId());
+            st.setString(4, newUser.getPhotoId() == null || newUser.getPhotoId().equals("")
+                    ? oldUser.getPhotoId() : newUser.getPhotoId());
+            st.setInt(5, newUser.getId());
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -101,7 +104,7 @@ public class DBStore implements Store {
     @Override
     public void delete(User user) {
         try (Connection connection = SOURCE.getConnection();
-             PreparedStatement st = connection.prepareStatement("delete from user_servlet where id = ?")) {
+             PreparedStatement st = connection.prepareStatement("delete from users where id = ?")) {
             st.setInt(1, user.getId());
             st.executeUpdate();
         } catch (SQLException e) {
@@ -118,10 +121,10 @@ public class DBStore implements Store {
         List<User> users = new ArrayList<>();
         try (Connection connection = SOURCE.getConnection();
              Statement st = connection.createStatement()) {
-            ResultSet rs = st.executeQuery("select * from user_servlet");
+            ResultSet rs = st.executeQuery("select * from users order by id");
             while (rs.next()) {
                 users.add(new User(rs.getInt("id"), rs.getString("name"), rs.getString("login"),
-                        rs.getString("email"), rs.getString("creation_date")));
+                        rs.getString("email"), rs.getString("photo"), rs.getString("creation_date")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -138,12 +141,12 @@ public class DBStore implements Store {
     public User findById(int id) {
         User user = null;
         try (Connection connection = SOURCE.getConnection();
-             PreparedStatement st = connection.prepareStatement("select * from user_servlet where id = ?")) {
+             PreparedStatement st = connection.prepareStatement("select * from users where id = ?")) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 user = new User(id, rs.getString("name"), rs.getString("login"),
-                        rs.getString("email"), rs.getString("creation_date"));
+                        rs.getString("email"), rs.getString("photo"), rs.getString("creation_date"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -157,11 +160,12 @@ public class DBStore implements Store {
     private void createTable() {
         try (Connection con = SOURCE.getConnection();
              Statement st = con.createStatement()) {
-            st.execute("create table if not exists user_servlet ("
+            st.execute("create table if not exists users ("
                     + "id serial primary key not null,"
                     + "name varchar(250),"
                     + "login varchar(250),"
                     + "email varchar(250),"
+                    + "photo varchar(250),"
                     + "creation_date varchar(50)"
                     + ");"
             );

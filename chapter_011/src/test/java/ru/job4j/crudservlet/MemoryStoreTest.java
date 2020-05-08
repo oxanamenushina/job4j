@@ -23,8 +23,8 @@ public class MemoryStoreTest {
 
     @Before
     public void addUsers() {
-        store.add(new User("Max", "max111", "max123@mail.ru"));
-        store.add(new User("Den", "den222", "den25@bk.ru"));
+        store.add(new User("Max", "max111", "max123@mail.ru", "111.jpg"));
+        store.add(new User("Den", "den222", "den25@bk.ru", "222.jpg"));
     }
 
     @After
@@ -34,7 +34,7 @@ public class MemoryStoreTest {
 
     @Test
     public void whenAddUserThenMemoryStoreContainsThisUser() {
-        User u1 = new User("Oleg", "Oleg333", "oleg@gmail.ru");
+        User u1 = new User("Oleg", "Oleg333", "oleg@gmail.ru", "333.jpg");
         store.add(u1);
         assertThat(store.findById(u1.getId()), is(u1));
     }
@@ -42,27 +42,27 @@ public class MemoryStoreTest {
     @Test
     public void whenUpdateUserThenUserUpdated() {
         int id = store.findAll().get(0).getId();
-        store.update(new User(id, null, "M444", null));
+        store.update(new User(id, null, "M444", null, null));
         assertThat(store.findById(id).getLogin(), is("M444"));
     }
 
     @Test
     public void whenDeleteUserThenMemoryStoreHasNoThisUser() {
         int id = store.findAll().get(0).getId();
-        store.delete(new User(id, null, null, null));
+        store.delete(new User(id, null, null, null, null));
         assertThat(store.findAll().size(), is(1));
     }
 
     @Test
     public void whenFindAllThenReturnAllUsers() {
-        User u1 = new User("Ilya", "Ilya5", "ilya555@gmail.ru");
+        User u1 = new User("Ilya", "Ilya5", "ilya555@gmail.ru", "555.jpg");
         store.add(u1);
         assertThat(store.findAll().size(), is(3));
     }
 
     @Test
     public void whenFindByIdThenReturnUserWithSameId() {
-        User u1 = new User("Ilya", "Ilya5", "ilya555@gmail.ru");
+        User u1 = new User("Ilya", "Ilya5", "ilya555@gmail.ru", "555.jpg");
         store.add(u1);
         assertThat(store.findById(u1.getId()), is(u1));
     }

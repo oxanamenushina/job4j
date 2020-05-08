@@ -1,11 +1,22 @@
 package ru.job4j.crudservlet;
 
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * UserCreateController.
@@ -28,8 +39,16 @@ public class UserCreateController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html");
-        logic.add(new User(req.getParameter("name"), req.getParameter("login"), req.getParameter("email")));
+        ServletContext servletContext = this.getServletConfig().getServletContext();
+        try {
+            RequestHandler rh = new RequestHandler(req, servletContext);
+            User user = rh.setParameters();
+            if (logic.add(user)) {
+                rh.writeFile();
+            }
+        } catch (FileUploadException e) {
+            e.printStackTrace();
+        }
         resp.sendRedirect(String.format("%s/", req.getContextPath()));
     }
 }

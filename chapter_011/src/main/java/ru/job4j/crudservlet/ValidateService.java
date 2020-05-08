@@ -78,7 +78,8 @@ public class ValidateService implements Validate {
         boolean result = this.findById(newUser.getId()) != null
                 && (this.isRespond(newUser.getName(), this.nameTemplate)
                 || this.isRespond(newUser.getLogin(), this.loginTemplate)
-                || this.isRespond(newUser.getEmail(), this.emailTemplate));
+                || this.isRespond(newUser.getEmail(), this.emailTemplate)
+                || (newUser.getPhotoId() != null && !newUser.getPhotoId().equals("")));
         if (result) {
             store.update(newUser);
         }

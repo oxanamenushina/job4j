@@ -71,4 +71,21 @@
         <servlet-name>User Update Controller</servlet-name>
         <url-pattern>/update-user</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Photo Servlet</servlet-name>
+        <servlet-class>ru.job4j.crudservlet.PhotoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Photo Servlet</servlet-name>
+        <url-pattern>/photo</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DownloadServlet</servlet-name>
+        <servlet-class>ru.job4j.crudservlet.DownloadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DownloadServlet</servlet-name>
+        <url-pattern>/download</url-pattern>
+    </servlet-mapping>
 </web-app>

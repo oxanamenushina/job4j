@@ -6,10 +6,16 @@
 <html>
 <head>
     <title>UserList</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
 <body>
+<div class="container">
     <table border="1">
-        <tr><th> id </th><th> name </th><th> login </th><th> email </th><th> creation date </th></tr>
+        <tr><th> id </th><th> name </th><th> login </th><th> email </th><th> creation date </th><th> photo </th><th></th><th></th><th></th></tr>
         <c:forEach var="user" items="${users}">
         <tr>
             <td><c:out value="${user.id}"/></td>
@@ -17,6 +23,8 @@
             <td><c:out value="${user.login}"/></td>
             <td><c:out value="${user.email}"/></td>
             <td><c:out value="${user.createDate}"/></td>
+            <td><img src="${pageContext.servletContext.contextPath}/download?name=${user.photoId}" width="100px" height="100px"/></td>
+            <td><a href="${pageContext.servletContext.contextPath}/download?name=${user.photoId}">Download</a></td>
             <td>
                 <form action='${pageContext.servletContext.contextPath}/update-user'>
                     <input type='hidden' name='id' value='${user.id}'/>
@@ -36,5 +44,9 @@
     <form action='${pageContext.servletContext.contextPath}/create-user'>
         <input type='submit' value='Create new user'/>
     </form>
+    <form action='${pageContext.servletContext.contextPath}/photo'>
+        <input type='submit' value='Download files'/>
+    </form>
+</div>
 </body>
 </html>

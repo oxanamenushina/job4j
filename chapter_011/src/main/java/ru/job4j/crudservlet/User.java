@@ -32,16 +32,22 @@ public class User {
     private String email;
 
     /**
+     * User's photo.
+     */
+    private String photoId;
+
+    /**
      * Creation date.
      */
     private String createDate;
 
-    public User(int id, String name, String login, String email, String createDate) {
-        this.id = id;
+    public User() {
+    }
+
+    public User(String name, String login, String email) {
         this.name = name;
         this.login = login;
         this.email = email;
-        this.createDate = createDate;
     }
 
     public User(int id, String name, String login, String email) {
@@ -51,10 +57,28 @@ public class User {
         this.email = email;
     }
 
-    public User(String name, String login, String email) {
+    public User(int id, String name, String login, String email, String photoId, String createDate) {
+        this.id = id;
         this.name = name;
         this.login = login;
         this.email = email;
+        this.photoId = photoId;
+        this.createDate = createDate;
+    }
+
+    public User(int id, String name, String login, String email, String photoId) {
+        this.id = id;
+        this.name = name;
+        this.login = login;
+        this.email = email;
+        this.photoId = photoId;
+    }
+
+    public User(String name, String login, String email, String photoId) {
+        this.name = name;
+        this.login = login;
+        this.email = email;
+        this.photoId = photoId;
     }
 
     /**
@@ -87,6 +111,14 @@ public class User {
      */
     public String getEmail() {
         return this.email;
+    }
+
+    /**
+     * The method returns a filename.
+     * @return a filename.
+     */
+    public String getPhotoId() {
+        return this.photoId;
     }
 
     /**
@@ -127,6 +159,14 @@ public class User {
      */
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    /**
+     * The method sets a filename.
+     * @param photoId a filename.
+     */
+    public void setPhotoId(String photoId) {
+        this.photoId = photoId;
     }
 
     /**

@@ -4,7 +4,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
 /**
  * UserListController.
@@ -29,8 +31,13 @@ public class UserListController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html");
-        String id = req.getParameter("id");
-        this.logic.delete(new User(id != null ? Integer.parseInt(id) : -1, null, null, null));
+        String param = req.getParameter("id");
+        int id = param != null ? Integer.parseInt(param) : -1;
+        String fileName = this.logic.findById(id).getPhotoId();
+        boolean result = this.logic.delete(new User(id, null, null, null, null));
+        if (result && fileName != null && logic.findAll().stream().noneMatch(u -> fileName.equals(u.getPhotoId()))) {
+            new File("images" + File.separator + fileName).delete();
+        }
         resp.sendRedirect(String.format("%s/", req.getContextPath()));
     }
 }

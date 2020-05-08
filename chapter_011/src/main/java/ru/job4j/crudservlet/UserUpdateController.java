@@ -1,5 +1,8 @@
 package ru.job4j.crudservlet;
 
+import org.apache.commons.fileupload.FileUploadException;
+
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -28,14 +31,16 @@ public class UserUpdateController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html");
-        String id = req.getParameter("id");
-        logic.update(new User(
-                id == null ? -1 : Integer.parseInt(id),
-                req.getParameter("name"),
-                req.getParameter("login"),
-                req.getParameter("email")
-        ));
+        ServletContext servletContext = this.getServletConfig().getServletContext();
+        try {
+            RequestHandler rh = new RequestHandler(req, servletContext);
+            User user = rh.setParameters();
+            if (logic.update(user)) {
+                rh.writeFile();
+            }
+        } catch (FileUploadException e) {
+            e.printStackTrace();
+        }
         resp.sendRedirect(String.format("%s/", req.getContextPath()));
     }
 }
