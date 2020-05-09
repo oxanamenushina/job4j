@@ -37,7 +37,13 @@ public class ValidateService implements Validate {
     private final String emailTemplate
             = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
+    /**
+     * The template for the user's password.
+     */
+    private final String passwordTemplate = "[A-Za-z0-9]+";
+
     private ValidateService() {
+        this.add(new User("Administrator", "Admin", "123", "admin@mail.ru", Role.Admin, ""));
     }
 
     /**
@@ -59,7 +65,8 @@ public class ValidateService implements Validate {
         boolean result = this.isAbsent(user)
                 && this.isRespond(user.getName(), this.nameTemplate)
                 && this.isRespond(user.getLogin(), this.loginTemplate)
-                && this.isRespond(user.getEmail(), this.emailTemplate);
+                && this.isRespond(user.getEmail(), this.emailTemplate)
+                && this.isRespond(user.getPassword(), this.passwordTemplate);
         if (result) {
             this.store.add(user);
         }
@@ -79,6 +86,7 @@ public class ValidateService implements Validate {
                 && (this.isRespond(newUser.getName(), this.nameTemplate)
                 || this.isRespond(newUser.getLogin(), this.loginTemplate)
                 || this.isRespond(newUser.getEmail(), this.emailTemplate)
+                || this.isRespond(newUser.getPassword(), this.passwordTemplate)
                 || (newUser.getPhotoId() != null && !newUser.getPhotoId().equals("")));
         if (result) {
             store.update(newUser);
@@ -122,13 +130,26 @@ public class ValidateService implements Validate {
     }
 
     /**
+     * The method checks if an account exists
+     * with the given login and password.
+     * @param login login.
+     * @param password password.
+     * @return true - authorization was successful.
+     */
+    @Override
+    public boolean isPermit(String login, String password) {
+        return this.findAll().stream().anyMatch(u -> login.equals(u.getLogin()) && password.equals(u.getPassword()));
+    }
+
+    /**
      * The method checks if the user
      * is absent in the storage.
      * @param user user.
      * @return true - the user is absent.
      */
     private boolean isAbsent(User user) {
-        return this.findAll().stream().noneMatch(user::equals);
+        return this.findAll().stream().noneMatch(u -> user.getLogin().equals(u.getLogin())
+                || user.getEmail().equals(u.getEmail()) || user.getPassword().equals(u.getPassword()));
     }
 
     /**

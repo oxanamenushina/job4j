@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -25,6 +26,10 @@ public class UserUpdateController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        Role role = logic.findAll().stream().filter(u -> session.getAttribute("login").equals(u.getLogin()))
+                .findFirst().get().getRole();
+        req.setAttribute("status", role.toString());
         req.setAttribute("user", ValidateService.getInstance().findById(Integer.parseInt(req.getParameter("id"))));
         req.getRequestDispatcher("/WEB-INF/crud/update/Update.jsp").forward(req, resp);
     }

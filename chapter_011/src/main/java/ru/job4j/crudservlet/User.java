@@ -27,9 +27,19 @@ public class User {
     private String login;
 
     /**
+     * User's password.
+     */
+    private String password;
+
+    /**
      * User's email address.
      */
     private String email;
+
+    /**
+     * User's role.
+     */
+    private Role role;
 
     /**
      * User's photo.
@@ -44,10 +54,23 @@ public class User {
     public User() {
     }
 
-    public User(String name, String login, String email) {
+    public User(int id, String name, String login, String password, String email, Role role, String photoId) {
+        this.id = id;
         this.name = name;
         this.login = login;
+        this.password = password;
         this.email = email;
+        this.role = role;
+        this.photoId = photoId;
+    }
+
+    public User(String name, String login, String password, String email, Role role, String photoId) {
+        this.name = name;
+        this.login = login;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.photoId = photoId;
     }
 
     public User(int id, String name, String login, String email) {
@@ -57,28 +80,10 @@ public class User {
         this.email = email;
     }
 
-    public User(int id, String name, String login, String email, String photoId, String createDate) {
-        this.id = id;
+    public User(String name, String login, String email) {
         this.name = name;
         this.login = login;
         this.email = email;
-        this.photoId = photoId;
-        this.createDate = createDate;
-    }
-
-    public User(int id, String name, String login, String email, String photoId) {
-        this.id = id;
-        this.name = name;
-        this.login = login;
-        this.email = email;
-        this.photoId = photoId;
-    }
-
-    public User(String name, String login, String email, String photoId) {
-        this.name = name;
-        this.login = login;
-        this.email = email;
-        this.photoId = photoId;
     }
 
     /**
@@ -106,11 +111,27 @@ public class User {
     }
 
     /**
+     * The method returns user's password.
+     * @return password.
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
      * The method returns user's email address.
      * @return user's email address.
      */
     public String getEmail() {
         return this.email;
+    }
+
+    /**
+     * The method returns user's role.
+     * @return user's role.
+     */
+    public Role getRole() {
+        return role;
     }
 
     /**
@@ -154,11 +175,27 @@ public class User {
     }
 
     /**
+     * The method sets user's password.
+     * @param password user's password.
+     */
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    /**
      * The method sets user's email address.
      * @param email user's email address.
      */
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    /**
+     * The method sets user's role.
+     * @param role user's role.
+     */
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     /**

@@ -18,11 +18,26 @@
         <td>
             <img src="${pageContext.servletContext.contextPath}/download?name=${user.photoId}" width="100px" height="100px"/>
         </td>
-        <br>
-        <br>
+        <br><br>
         Choose another photo: <input type="file" value='${user.photoId}' name="file"/><br><br>
+        new password: <br>
+        <input type='password' value='${user.password}' name='password'/><br><br>
+        <c:if test="${status == 'Admin'}">
+            role: <br>
+            <select name='role'>
+                <option value='Admin'>Admin</option>
+                <option value='User'>User</option>
+            </select>
+            <br><br>
+        </c:if>
+        <c:if test="${status != 'Admin'}">
+            <input type='hidden' name='role' value='${status}'>
+        </c:if>
         <input type='hidden' name='id' value='${user.id}'/>
+        <br>
         <input type='submit' value='update'/>
     </form>
+    <br>
+    <a href="${pageContext.servletContext.contextPath}/signout" methods="post">Log out</a>
 </body>
 </html>

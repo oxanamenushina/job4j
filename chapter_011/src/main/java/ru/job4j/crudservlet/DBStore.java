@@ -63,12 +63,14 @@ public class DBStore implements Store {
     public void add(User user) {
         try (Connection connection = SOURCE.getConnection();
              PreparedStatement st = connection.prepareStatement(
-                     "insert into users (name, login, email, photo, creation_date) values (?, ?, ?, ?, ?)")) {
+                     "insert into user_accounts (name, login, password, email, role, photo, creation_date) values (?, ?, ?, ?, ?, ?, ?)")) {
             st.setString(1, user.getName());
             st.setString(2, user.getLogin());
-            st.setString(3, user.getEmail());
-            st.setString(4, user.getPhotoId());
-            st.setString(5, new SimpleDateFormat("yyyy-MM-dd").format(new GregorianCalendar().getTime()));
+            st.setString(3, user.getPassword());
+            st.setString(4, user.getEmail());
+            st.setString(5, user.getRole().toString());
+            st.setString(6, user.getPhotoId());
+            st.setString(7, new SimpleDateFormat("yyyy-MM-dd").format(new GregorianCalendar().getTime()));
             st.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -84,13 +86,16 @@ public class DBStore implements Store {
         User oldUser = this.findById(newUser.getId());
         try (Connection connection = SOURCE.getConnection();
              PreparedStatement st = connection.prepareStatement(
-                     "update users set name = ?, login = ?, email = ?, photo = ? where id = ?")) {
+                     "update user_accounts set name = ?, login = ?, password = ?, email = ?, role = ?, photo = ? where id = ?")) {
             st.setString(1, newUser.getName() == null ? oldUser.getName() : newUser.getName());
             st.setString(2, newUser.getLogin() == null ? oldUser.getLogin() : newUser.getLogin());
-            st.setString(3, newUser.getEmail() == null ? oldUser.getEmail() : newUser.getEmail());
-            st.setString(4, newUser.getPhotoId() == null || newUser.getPhotoId().equals("")
+            st.setString(3, newUser.getPassword() == null ? oldUser.getPassword() : newUser.getPassword());
+            st.setString(4, newUser.getEmail() == null ? oldUser.getEmail() : newUser.getEmail());
+            Role role = newUser.getRole() == null ? oldUser.getRole() : newUser.getRole();
+            st.setString(5, role.toString());
+            st.setString(6, newUser.getPhotoId() == null || newUser.getPhotoId().equals("")
                     ? oldUser.getPhotoId() : newUser.getPhotoId());
-            st.setInt(5, newUser.getId());
+            st.setInt(7, newUser.getId());
             st.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -104,7 +109,7 @@ public class DBStore implements Store {
     @Override
     public void delete(User user) {
         try (Connection connection = SOURCE.getConnection();
-             PreparedStatement st = connection.prepareStatement("delete from users where id = ?")) {
+             PreparedStatement st = connection.prepareStatement("delete from user_accounts where id = ?")) {
             st.setInt(1, user.getId());
             st.executeUpdate();
         } catch (SQLException e) {
@@ -121,10 +126,12 @@ public class DBStore implements Store {
         List<User> users = new ArrayList<>();
         try (Connection connection = SOURCE.getConnection();
              Statement st = connection.createStatement()) {
-            ResultSet rs = st.executeQuery("select * from users order by id");
+            ResultSet rs = st.executeQuery("select * from user_accounts order by id");
             while (rs.next()) {
-                users.add(new User(rs.getInt("id"), rs.getString("name"), rs.getString("login"),
-                        rs.getString("email"), rs.getString("photo"), rs.getString("creation_date")));
+                User user = new User(rs.getInt("id"), rs.getString("name"), rs.getString("login"), rs.getString("password"),
+                        rs.getString("email"), Role.valueOf(rs.getString("role")), rs.getString("photo"));
+                user.setCreateDate(rs.getString("creation_date"));
+                users.add(user);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -141,12 +148,13 @@ public class DBStore implements Store {
     public User findById(int id) {
         User user = null;
         try (Connection connection = SOURCE.getConnection();
-             PreparedStatement st = connection.prepareStatement("select * from users where id = ?")) {
+             PreparedStatement st = connection.prepareStatement("select * from user_accounts where id = ?")) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
-                user = new User(id, rs.getString("name"), rs.getString("login"),
-                        rs.getString("email"), rs.getString("photo"), rs.getString("creation_date"));
+                user = new User(id, rs.getString("name"), rs.getString("login"), rs.getString("password"),
+                        rs.getString("email"), Role.valueOf(rs.getString("role")), rs.getString("photo"));
+                user.setCreateDate(rs.getString("creation_date"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -160,11 +168,13 @@ public class DBStore implements Store {
     private void createTable() {
         try (Connection con = SOURCE.getConnection();
              Statement st = con.createStatement()) {
-            st.execute("create table if not exists users ("
+            st.execute("create table if not exists user_accounts ("
                     + "id serial primary key not null,"
                     + "name varchar(250),"
                     + "login varchar(250),"
+                    + "password varchar(100),"
                     + "email varchar(250),"
+                    + "role varchar(50),"
                     + "photo varchar(250),"
                     + "creation_date varchar(50)"
                     + ");"

@@ -9,8 +9,18 @@
     name: <input type='text' name='name'/><br><br>
     login: <input type='text' name='login'/><br><br>
     email: <input type='text' name='email'/><br><br>
-    photo: <input type="file" name="file"/><br><br>
+    photo: <input type='file' name='file'/><br><br>
+    password: <br>
+    <input type='password' name='password'/><br><br>
+    role: <br>
+    <select name='role'>
+        <option value='Admin'>Admin</option>
+        <option value='User'>User</option>
+    </select>
+    <br><br><br>
     <input type='submit' value='create'/>
 </form>
+<br>
+<a href="${pageContext.servletContext.contextPath}/signout" methods="post">Log out</a>
 </body>
 </html>

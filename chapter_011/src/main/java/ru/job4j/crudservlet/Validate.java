@@ -49,4 +49,13 @@ public interface Validate {
      * @return user with the specified id.
      */
     User findById(int id);
+
+    /**
+     * The method checks if an account exists
+     * with the given login and password.
+     * @param login login.
+     * @param password password.
+     * @return true - authorization was successful.
+     */
+    boolean isPermit(String login, String password);
 }

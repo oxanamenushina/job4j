@@ -15,37 +15,48 @@
 <body>
 <div class="container">
     <table border="1">
-        <tr><th> id </th><th> name </th><th> login </th><th> email </th><th> creation date </th><th> photo </th><th></th><th></th><th></th></tr>
+        <tr><th>id</th><th>name</th><th>login</th><th>email</th><th>role</th><th>creation date</th><th>photo</th><th></th></tr>
         <c:forEach var="user" items="${users}">
         <tr>
             <td><c:out value="${user.id}"/></td>
             <td><c:out value="${user.name}"/></td>
             <td><c:out value="${user.login}"/></td>
             <td><c:out value="${user.email}"/></td>
+            <td><c:out value="${user.role}"/></td>
             <td><c:out value="${user.createDate}"/></td>
             <td><img src="${pageContext.servletContext.contextPath}/download?name=${user.photoId}" width="100px" height="100px"/></td>
             <td><a href="${pageContext.servletContext.contextPath}/download?name=${user.photoId}">Download</a></td>
             <td>
-                <form action='${pageContext.servletContext.contextPath}/update-user'>
-                    <input type='hidden' name='id' value='${user.id}'/>
-                    <input type='submit' value='update'/>
-                </form>
+                <c:if test="${status == 'Admin' || sessionLogin == user.login}">
+                    <form action='${pageContext.servletContext.contextPath}/update-user'>
+                        <input type='hidden' name='id' value='${user.id}'/>
+                        <input type='submit' value='update'/>
+                    </form>
+                </c:if>
             </td>
-            <td>
-                <form action='${pageContext.servletContext.contextPath}/' method='post'>
-                    <input type='hidden' name='id' value='${user.id}'/>
-                    <input type='submit' value='delete'/>
-                </form>
-            </td>
+            <c:if test="${status == 'Admin'}">
+                <td>
+                    <form action='${pageContext.servletContext.contextPath}/' method='post'>
+                        <input type='hidden' name='id' value='${user.id}'/>
+                        <input type='submit' value='delete'/>
+                    </form>
+
+                </td>
+            </c:if>
         </tr>
         </c:forEach>
     </table>
+    <br>
+    <a href="${pageContext.servletContext.contextPath}/photo">Download files</a>
     <br><br>
-    <form action='${pageContext.servletContext.contextPath}/create-user'>
-        <input type='submit' value='Create new user'/>
-    </form>
-    <form action='${pageContext.servletContext.contextPath}/photo'>
-        <input type='submit' value='Download files'/>
+    <c:if test="${status == 'Admin'}">
+        <form action='${pageContext.servletContext.contextPath}/create-user'>
+            <input type='submit' value='Create new user'/>
+        </form>
+        <br>
+    </c:if>
+    <form action='${pageContext.servletContext.contextPath}/signout' method='post'>
+        <input type='submit' value='Log out'/>
     </form>
 </div>
 </body>

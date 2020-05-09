@@ -55,11 +55,10 @@ public class RequestHandler {
                 actions.getAction(item.getFieldName()).accept(fn);
             } else {
                 String key = item.getFieldName();
-                if (!"id".equals(key)) {
+                if (!"id".equals(key) && !"role".equals(key)) {
                     actions.getAction(key).accept(item.getString());
                 } else {
-                    String id = item.getString();
-                    this.user.setId(id == null ? -1 : Integer.parseInt(id));
+                    this.setNonString(item);
                 }
             }
         }
@@ -86,6 +85,20 @@ public class RequestHandler {
     }
 
     /**
+     * The method sets non-string parameters
+     * received from the request to the user.
+     * @param item item.
+     */
+    private void setNonString(FileItem item) {
+        if ("id".equals(item.getFieldName())) {
+            String id = item.getString();
+            this.user.setId(id == null ? -1 : Integer.parseInt(id));
+        } else {
+            this.user.setRole(Role.valueOf(item.getString()));
+        }
+    }
+
+    /**
      * Class Actions.
      */
     public class Actions {
@@ -98,6 +111,7 @@ public class RequestHandler {
         public Actions(User user) {
             this.actions.put("name", user::setName);
             this.actions.put("login", user::setLogin);
+            this.actions.put("password", user::setPassword);
             this.actions.put("email", user::setEmail);
             this.actions.put("file", user::setPhotoId);
         }
