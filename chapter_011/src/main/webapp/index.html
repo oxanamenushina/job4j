@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        function validate() {
+            var result = true;
+            var inform = "";
+            var fields = document.getElementsByClassName("form-control");
+            for (var i = 0; i < fields.length; i++) {
+                if ($(fields[i]).val() == '') {
+                    result = false;
+                    inform = inform + fields[i].getAttribute('title') + "\n\r";
+                }
+            }
+            if (!result) {
+                alert(inform);
+            }
+            return result;
+        }
+
+        function addRow() {
+            if (validate()) {
+                var name = $('#name').val();
+                var surname = $('#surname').val();
+                var arr = document.getElementsByName("sex");
+                var sex = arr[0].value;
+                if (arr[1].checked) {
+                    sex = arr[1].value;
+                }
+                var desc = $('#desc').val();
+                $('#users tr:last').after('<tr><td>'
+                    + name + '</td><td>'
+                    + surname + '</td><td>'
+                    + sex + '</td><td>'
+                    + desc + '</td></tr>');
+                $('#fields')[0].reset();
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div class="container-fluid">
+    <h1>My First Bootstrap Page</h1>
+</div>
+
+<form action="/action_page.php" id="fields">
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" class="form-control" title="Enter user name." id="name">
+    </div>
+    <div class="form-group">
+        <label for="surname">Surname:</label>
+        <input type="text" class="form-control" title="Enter user surname." id="surname">
+    </div>
+    <div class="form-group">
+        <label for="pwd">Password:</label>
+        <input type="password" class="form-control" title="Enter password." id="pwd">
+    </div>
+    <br>
+    <div>
+        Sex:
+        <div class="radio">
+            <label><input type="radio" name="sex" value="Male" checked>Male</label>
+        </div>
+        <div class="radio">
+            <label><input type="radio" name="sex" value="Female">Female</label>
+        </div>
+    </div>
+    <br>
+    <div class="form-group">
+        <label for="desc">Description:</label>
+        <textarea class="form-control" rows="5" title="Enter description." id="desc"></textarea>
+    </div>
+    <br>
+    <button type="button" class="btn btn-default" onclick="return validate();">Submit</button>
+    <button type="button" class="btn btn-default" onclick="addRow()">Add</button>
+</form>
+
+<div class="container">
+    <h2>Users</h2>
+    <table class="table table-bordered" id='users'>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Sex</th>
+            <th>Description</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
