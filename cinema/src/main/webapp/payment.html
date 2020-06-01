@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+
+        var vals;
+
+        $(document).ready(function(){
+            var str = document.getElementById("selected-place");
+            vals = window.location.href.split("param");
+            str.innerHTML = "Вы выбрали: ряд " + vals[1] + ", место " + vals[2] + ". Сумма : " + vals[3] + " рублей.";
+        });
+
+        function validate() {
+            var regName = /[A-Za-zА-Яа-яЁё]+ ([A-Za-zА-Яа-яЁё]+ [A-Za-zА-Яа-яЁё]+|([A-Za-zА-Яа-яЁё][1]\.[ ]?){2})/;
+            var regNum = /(\+7|8)\d{10}/;
+            var num = $('#phone').val().replace("(", "").replace(")", "");
+            return regName.test($('#username').val()) && regNum.test(num);
+        }
+        
+        function pay() {
+            if (validate()) {
+                $.ajax({
+                    type: "POST",
+                    data: JSON.stringify({
+                        name: $('#username').val(),
+                        phone: $('#phone').val(),
+                        row: vals[1],
+                        number: vals[2]
+                    }),
+                    url: "http://localhost:8080/cinema/hall",
+                    contentType: "application/json"
+                }).done(function(data) {
+                    if (data === "success") {
+                        alert("Операция успешно выполнена.");
+                    } else {
+                        alert("Операция не выполнена. Попробуйте снова.");
+                    }
+                    window.location.href = "./index.html";
+                });
+            } else {
+                alert("Данные введены некорректно.");
+                $('#userdata')[0].reset();
+            }
+            return false;
+        }
+    </script>
+    <title>Payment</title>
+</head>
+<body>
+<div class="container">
+    <div class="row pt-3">
+        <h3 id="selected-place">
+        </h3>
+    </div>
+    <div class="row">
+        <form id="userdata">
+            <div class="form-group">
+                <label for="username">ФИО</label>
+                <input type="text" class="form-control" id="username" placeholder="ФИО">
+            </div>
+            <div class="form-group">
+                <label for="phone">Номер телефона</label>
+                <input type="text" class="form-control" id="phone" placeholder="Номер телефона">
+            </div>
+            <button type="button" class="btn btn-success" onclick="pay()">Оплатить</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
